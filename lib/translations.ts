@@ -4,7 +4,6 @@ export const translations = {
     navBarbers: "Barbers",
     navContact: "Contact",
     navReviews: "Reviews",
-    navAcademy: "Academy",
     heroTitle: "Modern. Clean. Elegant.",
     heroSubtitle: "Welcome to INNOSTUDIO, a studio where style speaks for you.",
     aboutTitle: "Our Story",
@@ -27,7 +26,7 @@ export const translations = {
     reviewsTitle: "Hear From Our Clients",
     review1Text: "INNOSTUDIO is top-notch! It’s the first time I left a haircut feeling like it really suited me. Precise work, great vibe in the studio.",
     review1Name: "J. D.",
-    review2Text: "Absolute satisfaction. The guys know what they’re doing. Fast, detailed, professional.",
+    eview2Text: "Absolute satisfaction. The guys know what they’re doing. Fast, detailed, professional.",
     review2Name: "M. N.",
     review3Text: "Professional approach and awesome atmosphere. I felt right at home, I’ll definitely come back.",
     review3Name: "J. K.",
@@ -48,6 +47,7 @@ export const translations = {
     pricingHaircut: "Men's Haircut",
     pricingCombo: "Combo Haircut + Beard",
     pricingBeard: "Beard Trim",
+<<<<<<< HEAD
 
    // Academy page translations
    academyHeroTitle: "Educate. Inspire.",
@@ -75,6 +75,8 @@ export const translations = {
    academyFormMessage: "Your message (optional)",
    academyFormSubmit: "Apply Now",
    academyFormRequired: "Required",
+=======
+>>>>>>> origin/main
   },
   sk: {
     navAbout: "O nás",
@@ -129,6 +131,7 @@ export const translations = {
     pricingHaircut: "Pánsky strih",
     pricingCombo: "Combo strih + brada",
     pricingBeard: "Úprava brady",
+<<<<<<< HEAD
     // Academy page translations
     academyHeroTitle: "Educate. Inspire.",
     academyHeroSubtitle: "Ovládnite remeslo holičstva s personalizovaným vzdelávaním od odborníkov z praxe.",
@@ -155,5 +158,7 @@ export const translations = {
     academyFormMessage: "Správa (Nepovinné)",
     academyFormSubmit: "Prihlásiť sa",
     academyFormRequired: "Povinné",
+=======
+>>>>>>> origin/main
   },
 }
