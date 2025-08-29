@@ -24,7 +24,7 @@ export default function PrivacyPolicyPage() {
 
           <section>
             <h2 className="text-xl font-semibold mb-2">Osobné údaje, ktoré sú predmetom spracúvania</h2>
-            <p>Spracúvame nasledujúce kategórie Vašich osobných údajov:</p>
+            <p>Spracúvame nasledujúce kategórie vašich osobných údajov:</p>
             <ul className="list-disc ml-6 space-y-1">
               <li>identifikačné údaje (napríklad meno, priezvisko)</li>
               <li>kontaktné údaje (napríklad doručovacia adresa, fakturačná adresa, emailová adresa, telefónne číslo)</li>
