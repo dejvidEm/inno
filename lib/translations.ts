@@ -4,7 +4,6 @@ export const translations = {
     navBarbers: "Barbers",
     navContact: "Contact",
     navReviews: "Reviews",
-    navAcademy: "Academy",
     heroTitle: "Modern. Clean. Elegant.",
     heroSubtitle: "Welcome to INNOSTUDIO, a studio where style speaks for you.",
     aboutTitle: "Our Story",
@@ -27,7 +26,7 @@ export const translations = {
     reviewsTitle: "Hear From Our Clients",
     review1Text: "INNOSTUDIO is top-notch! It’s the first time I left a haircut feeling like it really suited me. Precise work, great vibe in the studio.",
     review1Name: "J. D.",
-    review2Text: "Absolute satisfaction. The guys know what they’re doing. Fast, detailed, professional.",
+    eview2Text: "Absolute satisfaction. The guys know what they’re doing. Fast, detailed, professional.",
     review2Name: "M. N.",
     review3Text: "Professional approach and awesome atmosphere. I felt right at home, I’ll definitely come back.",
     review3Name: "J. K.",
@@ -48,33 +47,6 @@ export const translations = {
     pricingHaircut: "Men's Haircut",
     pricingCombo: "Combo Haircut + Beard",
     pricingBeard: "Beard Trim",
-
-   // Academy page translations
-   academyHeroTitle: "INNOAcademy",
-   academyHeroSubtitle: "Master the craft of barbering with personalized training from industry professionals.",
-   academyAboutTitle: "Learn From The Masters",
-   academyAboutText:
-     "Our Academy offers exclusive one-on-one and small group training sessions with our master barbers. Whether you're starting your journey or looking to refine your skills, our personalized approach ensures you receive the attention and expertise needed to excel in the art of barbering.",
-   academyInstructorsTitle: "Meet Your Instructors",
-   academyOptionsTitle: "Training Options",
-   academyOption1Title: "1-on-1 Training",
-   academyOption1Text:
-     "Receive undivided attention from our master barbers. Perfect for beginners or those looking to master specific techniques. Includes personalized curriculum, hands-on practice, and direct feedback.",
-   academyOption2Title: "1-on-2 Training",
-   academyOption2Text:
-     "Learn alongside a fellow student while still receiving personalized instruction. Great for friends or colleagues who want to learn together. More affordable while maintaining high-quality education.",
-   academyContactTitle: "Apply for Academy",
-   academyContactText:
-     "Ready to start your barbering journey? Fill out the form below and we'll get back to you within 24 hours.",
-   academyFormName: "Full Name",
-   academyFormEmail: "Email Address",
-   academyFormPhone: "Phone Number",
-   academyFormOption: "Training Option",
-   academyFormOption1: "1-on-1 Training",
-   academyFormOption2: "1-on-2 Training",
-   academyFormMessage: "Your message (optional)",
-   academyFormSubmit: "Apply Now",
-   academyFormRequired: "Required",
   },
   sk: {
     navAbout: "O nás",
@@ -129,31 +101,5 @@ export const translations = {
     pricingHaircut: "Pánsky strih",
     pricingCombo: "Combo strih + brada",
     pricingBeard: "Úprava brady",
-    // Academy page translations
-    academyHeroTitle: "INNO Academy",
-    academyHeroSubtitle: "Ovládnite remeslo holičstva s personalizovaným vzdelávaním od odborníkov z praxe.",
-    academyAboutTitle: "Učte sa od majstrov",
-    academyAboutText:
-      "Naša Akadémia ponúka exkluzívne individuálne a maloskupinové tréningy s našimi majstrami holičmi. Či už začínate svoju cestu alebo chcete zdokonaliť svoje zručnosti, náš personalizovaný prístup zabezpečuje, že dostanete pozornosť a odbornosť potrebnú na úspech v umení holičstva.",
-    academyInstructorsTitle: "Zoznámte sa s inštruktormi",
-    academyOptionsTitle: "Možnosti vzdelávania",
-    academyOption1Title: "1-na-1 Tréning",
-    academyOption1Text:
-      "Získajte nedelenú pozornosť od našich majstrov holičov. Ideálne pre začiatočníkov alebo tých, ktorí sa chcú naučiť špecifické techniky. Zahŕňa personalizované učebné osnovy, praktické cvičenia a priamu spätnú väzbu.",
-    academyOption2Title: "1-na-2 Tréning",
-    academyOption2Text:
-      "Učte sa spolu s ďalším študentom a stále dostávajte personalizované vzdelávanie. Skvelé pre priateľov alebo kolegov, ktorí sa chcú učiť spolu. Cenovo dostupnejšie pri zachovaní vysokej kvality vzdelávania.",
-    academyContactTitle: "Prihláška do Akadémie",
-    academyContactText:
-      "Pripravený začať svoju cestu v holičstve? Vyplňte formulár nižšie a ozveme sa vám do 24 hodín.",
-    academyFormName: "Celé meno",
-    academyFormEmail: "Emailová adresa",
-    academyFormPhone: "Telefónne číslo",
-    academyFormOption: "Možnosť vzdelávania",
-    academyFormOption1: "1-2-1 Tréning",
-    academyFormOption2: "BEGINNER COURSE",
-    academyFormMessage: "Správa (Nepovinné)",
-    academyFormSubmit: "Prihlásiť sa",
-    academyFormRequired: "Povinné",
   },
 }
