@@ -643,7 +643,7 @@ const PhotoSwiper = ({
                   required
                   className={`w-full px-3 py-2 rounded-md border ${inputBgColor} ${inputBorderColor} ${inputTextColor} focus:border-beige-400 focus:outline-none`}
                 >
-                  <option value="">Vyberte typ kurzu</option>
+                  <option value="">{t.academySelect}</option>
                   <option value="1on1">{t.academyFormOption1}</option>
                   <option value="1on2">{t.academyFormOption2}</option>
                 </select>
@@ -674,73 +674,89 @@ const PhotoSwiper = ({
   }
   
 
-const Footer = () => {
-  const { t } = useLanguage()
-  const footerNavItems = [
-    { href: "/#about", label: t.navAbout },
-    { href: "/#barbers", label: t.navBarbers },
-    { href: "/#reviews", label: t.navReviews },
-    { href: "/#contact", label: t.navContact },
-    { href: "/academy", label: "Academy" },
-  ]
-
-  return (
-    <footer className="bg-black text-white pt-16 pb-12 md:pt-24 md:pb-20">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-16 text-center md:text-left">
-          <div className="flex flex-col items-center md:items-start">
-            <Link href="/" className="flex items-center gap-2 text-white mb-4">
-              <Scissors className="h-7 w-7 text-beige-300" />
-              <span className="text-2xl font-bold tracking-wider uppercase">INNO Studio</span>
-            </Link>
-            <p className="text-sm text-gray-400">
-              &copy; {new Date().getFullYear()} INNO Studio. <br className="sm:hidden" />
-              All Rights Reserved.
-            </p>
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold text-beige-200 uppercase tracking-wider mb-4">{t.footerQuickLinks}</h3>
-            <ul className="space-y-2">
-              {footerNavItems.map((item) => (
-                <li key={item.href}>
-                  <Link href={item.href} className="text-gray-300 hover:text-beige-100 transition-colors duration-200">
-                    {item.label}
-                  </Link>
+  const Footer = () => {
+    const { t } = useLanguage()
+    const footerNavItems = [
+      { href: "#about", label: t.navAbout },
+      { href: "#barbers", label: t.navBarbers },
+      { href: "#reviews", label: t.navReviews },
+      { href: "#contact", label: t.navContact },
+      { href: "/academy", label: "Academy" },
+    ]
+  
+    return (
+      <footer className="bg-black text-white pt-16 pb-12 md:pt-24 md:pb-20">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-16 text-center md:text-left">
+            <div className="flex flex-col items-center md:items-start">
+              <Link href="#hero" className="flex items-center gap-2 text-white mb-4">
+                <img src="pics/new.png" alt="" className="w-40"/>
+              </Link>
+              <p className="text-sm text-gray-400">
+                &copy; {new Date().getFullYear()} INNOSTUDIO. <br className="sm:hidden" />
+                Všetky práva vyhradené.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-beige-200 uppercase tracking-wider mb-4">{t.footerQuickLinks}</h3>
+              <ul className="space-y-2">
+                {footerNavItems.map((item) => (
+                  <li key={item.href}>
+                    <Link href={item.href} className="text-gray-300 hover:text-beige-100 transition-colors duration-200">
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-beige-200 uppercase tracking-wider mb-4">{t.footerContactUs}</h3>
+              <ul className="space-y-3">
+                <li className="flex items-center justify-center md:justify-start gap-3">
+                  <MapPin className="h-5 w-5 text-beige-300 flex-shrink-0" />
+                  <span className="text-gray-300">{t.contactAddress}</span>
                 </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold text-beige-200 uppercase tracking-wider mb-4">{t.footerContactUs}</h3>
-            <ul className="space-y-3">
-              <li className="flex items-center justify-center md:justify-start gap-3">
-                <MapPin className="h-5 w-5 text-beige-300 flex-shrink-0" />
-                <span className="text-gray-300">{t.contactAddress}</span>
-              </li>
-              <li className="flex items-center justify-center md:justify-start gap-3">
-                <Phone className="h-5 w-5 text-beige-300 flex-shrink-0" />
-                <a
-                  href={`tel:${t.contactPhone.replace(/\s/g, "")}`}
-                  className="text-gray-300 hover:text-beige-100 transition-colors duration-200"
-                >
-                  {t.contactPhone}
-                </a>
-              </li>
-              <li className="flex items-center justify-center md:justify-start gap-3">
-                <Mail className="h-5 w-5 text-beige-300 flex-shrink-0" />
-                <a
-                  href={`mailto:${t.contactEmail}`}
-                  className="text-gray-300 hover:text-beige-100 transition-colors duration-200"
-                >
-                  {t.contactEmail}
-                </a>
-              </li>
-            </ul>
+                <li className="flex items-center justify-center md:justify-start gap-3">
+                  <Phone className="h-5 w-5 text-beige-300 flex-shrink-0" />
+                  <a
+                    href={`tel:${t.contactPhone.replace(/\s/g, "")}`}
+                    className="text-gray-300 hover:text-beige-100 transition-colors duration-200"
+                  >
+                    {t.contactPhone}
+                  </a>
+                </li>
+                <li className="flex items-center justify-center md:justify-start gap-3">
+                  <Mail className="h-5 w-5 text-beige-300 flex-shrink-0" />
+                  <a
+                    href={`mailto:${t.contactEmail}`}
+                    className="text-gray-300 hover:text-beige-100 transition-colors duration-200"
+                  >
+                    {t.contactEmail}
+                  </a>
+                </li>
+              </ul>
+              <div className="mt-4 text-gray-400 text-center md:text-left">
+                <div className="font-semibold mb-1">Otváracie hodiny</div>
+                <div>Pon - Pia: 8:00 - 20:00</div>
+                <div>Sobota: Na objednávku</div>
+                <div>Nedeľa: zatvorené</div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </footer>
-  )
+        <div className="mt-10 border-t border-zinc-800 pt-6 pb-2 bg-zinc-950/80">
+          <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-gray-400 text-center">
+            <div>
+              <span className="font-semibold text-white">RYCAS Academy s. r. o.</span> &nbsp;|&nbsp; Doležalova 3424/15C, Bratislava - Ružinov &nbsp;|&nbsp; IČO: 57019151 &nbsp;|&nbsp; DIČ: 2122542092
+            </div>
+            <div className="flex gap-4 mt-2 md:mt-0">
+              <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" className="hover:text-beige-100 underline transition-colors duration-200">Privacy Policy</a>
+              <a href="/cookies" target="_blank" rel="noopener noreferrer" className="hover:text-beige-100 underline transition-colors duration-200">Cookies Policy</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    )
 }
 
 export function AcademyPage() {
