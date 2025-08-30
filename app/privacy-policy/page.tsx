@@ -1,9 +1,10 @@
-import { Header, Footer } from "@/components/client-page"
+import { Footer } from "@/components/client-page"
+import { SharedHeader } from "@/components/shared-header"
 
 export default function PrivacyPolicyPage() {
   return (
     <div className="bg-white min-h-screen font-sans flex flex-col">
-      <Header />
+      <SharedHeader />
       <main className="flex-1 flex items-center justify-center px-8 py-24">
         <div className="w-full max-w-3xl text-left space-y-8">
           <h1 className="text-4xl font-bold mt-20 mb-4">Zásady ochrany osobných údajov</h1>
@@ -24,7 +25,7 @@ export default function PrivacyPolicyPage() {
 
           <section>
             <h2 className="text-xl font-semibold mb-2">Osobné údaje, ktoré sú predmetom spracúvania</h2>
-            <p>Spracúvame nasledujúce kategórie vašich osobných údajov:</p>
+            <p>Spracúvame nasledujúce kategórie Vašich osobných údajov:</p>
             <ul className="list-disc ml-6 space-y-1">
               <li>identifikačné údaje (napríklad meno, priezvisko)</li>
               <li>kontaktné údaje (napríklad doručovacia adresa, fakturačná adresa, emailová adresa, telefónne číslo)</li>
