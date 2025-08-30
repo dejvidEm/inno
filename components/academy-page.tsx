@@ -23,6 +23,7 @@ import {
 import { useLanguage } from "@/context/language-context"
 import { SharedHeader } from "@/components/shared-header"
 import GoogleMap from '@/components/Map'
+import { sendEmail } from "@/actions/sendEmail"
 
 type Theme = "light" | "dark"
 
@@ -533,15 +534,30 @@ const PhotoSwiper = ({
     )
   }
   
+  import { useSearchParams } from "next/navigation"
+
   const ContactFormSection = ({ theme }: { theme: Theme }) => {
     const { t } = useLanguage()
+  
     const [formData, setFormData] = useState({
-      name: "",
+      meno: "",
       email: "",
-      phone: "",
-      option: "",
+      cislo: "",
+      kurz: "",
       message: "",
     })
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [isSubmitted, setIsSubmitted] = useState(false)
+    const [errorMsg, setErrorMsg] = useState<string | null>(null)
+  
+    const searchParams = useSearchParams()
+  
+    useEffect(() => {
+      const kurzParam = searchParams.get("kurz")
+      if (kurzParam) {
+        setFormData((prev) => ({ ...prev, kurz: kurzParam }))
+      }
+    }, [searchParams])
   
     const handleInputChange = (
       e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -550,9 +566,34 @@ const PhotoSwiper = ({
       setFormData((prev) => ({ ...prev, [name]: value }))
     }
   
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault()
-      console.log("Form submitted:", formData)
+      if (isSubmitting) return
+  
+      setIsSubmitting(true)
+      setErrorMsg(null)
+  
+      try {
+        const fd = new FormData()
+        fd.append("meno", formData.meno)
+        fd.append("email", formData.email)
+        if (formData.cislo) fd.append("cislo", formData.cislo)
+        fd.append("kurz", formData.kurz)
+        fd.append("message", formData.message)
+  
+        const res = await sendEmail(fd)
+  
+        if (res?.ok) {
+          setIsSubmitted(true)
+        } else {
+          setErrorMsg(res?.error || "Nepodarilo sa odoslať email.")
+        }
+      } catch (err) {
+        setErrorMsg("Nastala neočakávaná chyba pri odosielaní.")
+        console.error(err)
+      } finally {
+        setIsSubmitting(false)
+      }
     }
   
     const headingColor = theme === "light" ? "text-zinc-900" : "text-white"
@@ -563,7 +604,6 @@ const PhotoSwiper = ({
     const inputBorderColor = theme === "light" ? "border-gray-300" : "border-gray-600"
     const inputTextColor = theme === "light" ? "text-zinc-900" : "text-white"
   
-    // max 3 fotky (cyklické)
     const gallery = ["/photos/end1.jpeg", "/photos/academy2.jpeg", "/photos/end2.png"]
   
     return (
@@ -577,14 +617,14 @@ const PhotoSwiper = ({
           <p className={`mt-6 ${textColor} md:text-lg`}>{t.academyContactText}</p>
         </div>
   
-        {/* 2 stĺpce; rovnaká výška na ≥md */}
+        {/* 2 stĺpce */}
         <div className="mt-8 md:px-16 grid grid-cols-1 md:grid-cols-2 gap-16 md:items-stretch">
-          {/* ĽAVO: galéria – žiadny sticky, nech sa zarovná výškou s formulárom */}
+          {/* Ľavo: galéria */}
           <div className="md:h-full">
             <PhotoSwiper images={gallery} alt="Academy gallery" />
           </div>
   
-          {/* PRAVO: formulár – natiahnuť na výšku stĺpca */}
+          {/* Pravo: formulár */}
           <motion.form
             onSubmit={handleSubmit}
             className={`${formBgColor} p-6 rounded-lg shadow-lg w-full md:max-w-none h-full flex flex-col`}
@@ -593,80 +633,138 @@ const PhotoSwiper = ({
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <div className="space-y-4">
-              <div>
-                <label className={`block text-sm text-left font-medium ${textColor} mb-1`}>
-                  {t.academyFormName} <span className="text-red-500">*</span>
-                </label>
-                <Input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  required
-                  className={`${inputBgColor} ${inputBorderColor} ${inputTextColor} focus:border-beige-400`}
-                />
-              </div>
-              <div>
-                <label className={`block text-sm text-left font-medium ${textColor} mb-1`}>
-                  {t.academyFormEmail} <span className="text-red-500">*</span>
-                </label>
-                <Input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                  className={`${inputBgColor} ${inputBorderColor} ${inputTextColor} focus:border-beige-400`}
-                />
-              </div>
-              <div>
-                <label className={`block text-sm text-left font-medium ${textColor} mb-1`}>
-                  {t.academyFormPhone}
-                </label>
-                <Input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  className={`${inputBgColor} ${inputBorderColor} ${inputTextColor} focus:border-beige-400`}
-                />
-              </div>
-              <div>
-                <label className={`block text-sm text-left font-medium ${textColor} mb-1`}>
-                  {t.academyFormOption} <span className="text-red-500">*</span>
-                </label>
-                <select
-                  name="option"
-                  value={formData.option}
-                  onChange={handleInputChange}
-                  required
-                  className={`w-full px-3 py-2 rounded-md border ${inputBgColor} ${inputBorderColor} ${inputTextColor} focus:border-beige-400 focus:outline-none`}
+            {isSubmitted ? (
+              <div className="text-center py-12 md:py-40">
+                <svg
+                  className="h-16 w-16 text-emerald-500 mx-auto mb-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
                 >
-                  <option value="">{t.academySelect}</option>
-                  <option value="1on1">{t.academyFormOption1}</option>
-                  <option value="1on2">{t.academyFormOption2}</option>
-                </select>
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                  <path d="M22 4 12 14.01l-3-3" />
+                </svg>
+                <h3 className={`text-2xl font-bold mb-2 ${headingColor}`}>SUBMITTED. REGISTERED. DONE.</h3>
+                <p className={`${textColor}`}>Ozveme sa Vám čo najskôr</p>
               </div>
-              <div>
-                <label className={`block text-sm text-left font-medium ${textColor} mb-1`}>
-                  {t.academyFormMessage}
-                </label>
-                <Textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  rows={4}
-                  className={`${inputBgColor} ${inputBorderColor} ${inputTextColor} focus:border-beige-400`}
-                />
+            ) : (
+              <div className="space-y-4">
+                <div>
+                  <label className={`block text-sm text-left font-medium ${textColor} mb-1`}>
+                    {t.academyFormName} <span className="text-red-500">*</span>
+                  </label>
+                  <Input
+                    type="text"
+                    id="meno"
+                    name="meno"
+                    value={formData.meno}
+                    onChange={handleInputChange}
+                    required
+                    className={`${inputBgColor} ${inputBorderColor} ${inputTextColor} focus:border-beige-400`}
+                  />
+                </div>
+                <div>
+                  <label className={`block text-sm text-left font-medium ${textColor} mb-1`}>
+                    {t.academyFormEmail} <span className="text-red-500">*</span>
+                  </label>
+                  <Input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    required
+                    className={`${inputBgColor} ${inputBorderColor} ${inputTextColor} focus:border-beige-400`}
+                  />
+                </div>
+                <div>
+                  <label className={`block text-sm text-left font-medium ${textColor} mb-1`}>
+                    {t.academyFormPhone}
+                  </label>
+                  <Input
+                    type="tel"
+                    id="cislo"
+                    name="cislo"
+                    value={formData.cislo}
+                    onChange={handleInputChange}
+                    className={`${inputBgColor} ${inputBorderColor} ${inputTextColor} focus:border-beige-400`}
+                  />
+                </div>
+                <div>
+                  <label className={`block text-sm text-left font-medium ${textColor} mb-1`}>
+                    {t.academyFormOption} <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    id="kurz"
+                    name="kurz"
+                    value={formData.kurz}
+                    onChange={handleInputChange}
+                    required
+                    className={`w-full px-3 py-2 rounded-md border ${inputBgColor} ${inputBorderColor} ${inputTextColor} focus:border-beige-400 focus:outline-none`}
+                  >
+                    <option value="">{t.academySelect}</option>
+                    <option value="1-2-1 PRIVATE EDUCATION">{t.academyFormOption1}</option>
+                    <option value="BEGINNER COURSE">{t.academyFormOption2}</option>
+                  </select>
+                </div>
+                <div>
+                  <label className={`block text-sm text-left font-medium ${textColor} mb-1`}>
+                    {t.academyFormMessage}
+                  </label>
+                  <Textarea
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    rows={4}
+                    className={`${inputBgColor} ${inputBorderColor} ${inputTextColor} focus:border-beige-400`}
+                  />
+                </div>
+  
+                {/* chybová hláška (ak je) */}
+                {errorMsg && (
+                  <div className="text-sm text-red-600 border border-red-200 bg-red-50 rounded p-2">
+                    {errorMsg}
+                  </div>
+                )}
+  
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full bg-beige-400 hover:bg-beige-500 text-white font-bold py-2 px-4 rounded-md transition-colors duration-200"
+                >
+                  {isSubmitting ? (
+                    <span className="flex items-center justify-center">
+                      <svg
+                        className="animate-spin -ml-1 mr-2 h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        />
+                      </svg>
+                      {t.academyFormSubmit}…
+                    </span>
+                  ) : (
+                    t.academyFormSubmit
+                  )}
+                </Button>
               </div>
-              <Button
-                type="submit"
-                className="w-full bg-beige-400 hover:bg-beige-500 text-white font-bold py-2 px-4 rounded-md transition-colors duration-200"
-              >
-                {t.academyFormSubmit}
-              </Button>
-            </div>
+            )}
           </motion.form>
         </div>
       </AnimatedSection>
