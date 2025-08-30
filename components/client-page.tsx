@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, Suspense } from "react"
 import Link from "next/link"
 import Image from "next/image"
 
@@ -923,12 +923,14 @@ export function ClientPage() {
         </div>
         <ReviewsSection theme="dark" />
         <div className="bg-white text-zinc-900">
-          <ContactSection
+        <Suspense fallback={null}>
+        <ContactSection
             theme="light"
             sideImageSrc="/placeholder.svg?width=400&height=600"
             sideImageAlt="Abstract architectural lines"
             sideImagePosition="left"
           />
+    </Suspense>
         </div>
         <CallToActionBanner outerRef={ctaBannerRef} />
       </main>
