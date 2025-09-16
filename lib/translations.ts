@@ -83,7 +83,7 @@ export const translations = {
     navContact: "Kontakt",
     navReviews: "Recenzie",
     heroTitle: "Moderné. Čisté. Elegantné.",
-    heroSubtitle: "Vítaj v INNOSTUDIO, štúdio, kde štýl hovorí za teba",
+    heroSubtitle: "Vítaj v INNOSTUDIO, kde štýl hovorí za teba",
     aboutTitle: "Náš príbeh",
     aboutText:
       "V INNOSTUDIO prinášame eleganciu a precíznosť moderného barbershopu, kde každý detail rozpráva príbeh. Naša filozofia je jednoduchá — ponúknuť výnimočný servis v minimalistickom prostredí, ktoré vás nechá zažiť pocit výnimočnosti a sebadôvery. Každý strih je majstrovským dielom, vytvoreným s dôrazom na čistotu  a perfektnú rovnováhu medzi štýlom a funkčnosťou. U nás nejde len o úpravu vlasov či brady, ale o komplexný zážitok, ktorý posilní váš imidž aj vnútornú istotu. Vstúpte do sveta, kde moderný dizajn a prvotriedny servis vytvárajú jedinečnú atmosféru pre mužov, ktorí očakávajú len to najlepšie.",

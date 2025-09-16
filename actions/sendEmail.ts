@@ -23,12 +23,12 @@ export const sendEmail = async (formData: FormData) => {
     message, email, name: meno, number: cislo ?? "", kurz: kurz ?? ""
   })
 
-  const html = await render(element)            // React Email 3.x: render je async
-  const text = toPlainText(html)                // pekný text fallback
+  const html = await render(element)            
+  const text = toPlainText(html)               
 
   // 2) Pošli cez Resend s `html:` (nie `react:`!)
   const { data, error } = await resend.emails.send({
-    from: "Inno Studio <onboarding@resend.dev>", // na test ok; v produkcii použi overenú doménu
+    from: "Inno Studio <onboarding@resend.dev>", 
     to: "innomenstudio@gmail.com",
     subject: "Správa z webu innostudio.sk",
     replyTo: email,
