@@ -338,7 +338,7 @@ const TrainingOptionsSection = ({ theme }: { theme: Theme }) => {
               <div className="flex items-center justify-between mb-6">
                 <User className="h-12 w-12 text-beige-400 transform-gpu will-change-transform transition-transform duration-300 ease-out group-hover:-translate-y-2 group-hover:translate-x-2 group-hover:rotate-6 group-hover:scale-110" />
                 <div className="text-right">
-                  <div className={`text-2xl font-bold ${optionTitleColor}`}>€250</div>
+                  <div className={`text-2xl font-bold ${optionTitleColor}`}>€300</div>
                   <div className={`text-sm ${optionTextColor}`}>za osobu</div>
                 </div>
               </div>
