@@ -810,6 +810,7 @@ const Footer = () => {
     { href: "#reviews", label: t.navReviews },
     { href: "#contact", label: t.navContact },
     { href: "/academy", label: "Academy" },
+    { href: "/kariera", label: t.navCareer },
   ]
 
   return (

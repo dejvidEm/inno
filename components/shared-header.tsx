@@ -47,6 +47,8 @@ export const SharedHeader = () => {
   const isLegalPage = pathname.startsWith('/privacy-policy') || pathname.startsWith('/cookies')
   // Detect if we are on the academy page
   const isAcademyPage = pathname.startsWith('/academy')
+  // Detect if we are on the career page
+  const isCareerPage = pathname.startsWith('/kariera')
 
   const navItems = isLegalPage
     ? [
@@ -55,14 +57,16 @@ export const SharedHeader = () => {
         { href: '/', label: t.navReviews },
         { href: '/', label: t.navContact },
         { href: '/academy', label: 'Academy' },
+        { href: '/kariera', label: t.navCareer },
       ]
-    : isAcademyPage
+    : isAcademyPage || isCareerPage
     ? [
         { href: '/#about', label: t.navAbout },
         { href: '/#barbers', label: t.navBarbers },
         { href: '/#reviews', label: t.navReviews },
         { href: '/#contact', label: t.navContact },
         { href: '/academy', label: 'Academy' },
+        { href: '/kariera', label: t.navCareer },
       ]
     : [
         { href: '#about', label: t.navAbout },
@@ -70,9 +74,10 @@ export const SharedHeader = () => {
         { href: '#reviews', label: t.navReviews },
         { href: '#contact', label: t.navContact },
         { href: '/academy', label: 'Academy' },
+        { href: '/kariera', label: t.navCareer },
       ]
 
-  const logoHref = isLegalPage ? '/' : isAcademyPage ? '/' : '#hero'
+  const logoHref = isLegalPage ? '/' : isAcademyPage || isCareerPage ? '/' : '#hero'
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
   const closeMenu = () => setIsMenuOpen(false)
