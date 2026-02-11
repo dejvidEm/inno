@@ -213,28 +213,28 @@ const CareerSection1 = ({ theme }: { theme: Theme }) => {
           <p className={`mb-6 ${paragraphColor} md:text-lg`}>
             {t.careerSubtitle2}
           </p>
-          <h4 className={`text-lg md:text-xl font-semibold ${headingColor} mb-3 mt-6`}>
+          <h4 className={`text-lg md:text-xl font-semibold ${headingColor} mb-3 mt-6 text-left`}>
             {t.careerOfferTitle}
           </h4>
-          <ul className={`space-y-3 ${paragraphColor} md:text-lg`}>
+          <ul className={`space-y-3 ${paragraphColor} md:text-lg text-left`}>
             <li className="flex items-start gap-3">
-              <span className="text-beige-400 mt-1">•</span>
+              <span className="text-beige-400 mt-1 flex-shrink-0">•</span>
               <span>{t.careerPoint1}</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-beige-400 mt-1">•</span>
+              <span className="text-beige-400 mt-1 flex-shrink-0">•</span>
               <span>{t.careerPoint2}</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-beige-400 mt-1">•</span>
+              <span className="text-beige-400 mt-1 flex-shrink-0">•</span>
               <span>{t.careerPoint3}</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-beige-400 mt-1">•</span>
+              <span className="text-beige-400 mt-1 flex-shrink-0">•</span>
               <span>{t.careerPoint4}</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-beige-400 mt-1">•</span>
+              <span className="text-beige-400 mt-1 flex-shrink-0">•</span>
               <span>{t.careerPoint5}</span>
             </li>
           </ul>
@@ -259,24 +259,24 @@ const CareerSection2 = ({ theme }: { theme: Theme }) => {
       sideImagePosition="left"
     >
       <div className="text-center md:text-left">
-        <h4 className={`text-lg md:text-xl font-semibold ${headingColor} mb-3`}>
+        <h4 className={`text-lg md:text-xl font-semibold ${headingColor} mb-3 text-left`}>
           {t.careerExpectTitle}
         </h4>
-        <ul className={`space-y-3 ${paragraphColor} md:text-lg mb-8`}>
+        <ul className={`space-y-3 ${paragraphColor} md:text-lg mb-8 text-left`}>
           <li className="flex items-start gap-3">
-            <span className="text-beige-400 mt-1">•</span>
+            <span className="text-beige-400 mt-1 flex-shrink-0">•</span>
             <span>{t.careerExpect1}</span>
           </li>
           <li className="flex items-start gap-3">
-            <span className="text-beige-400 mt-1">•</span>
+            <span className="text-beige-400 mt-1 flex-shrink-0">•</span>
             <span>{t.careerExpect2}</span>
           </li>
           <li className="flex items-start gap-3">
-            <span className="text-beige-400 mt-1">•</span>
+            <span className="text-beige-400 mt-1 flex-shrink-0">•</span>
             <span>{t.careerExpect3}</span>
           </li>
           <li className="flex items-start gap-3">
-            <span className="text-beige-400 mt-1">•</span>
+            <span className="text-beige-400 mt-1 flex-shrink-0">•</span>
             <span>{t.careerExpect4}</span>
           </li>
         </ul>
