@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect, useRef, Suspense } from "react"
+import { useState, useEffect, useRef, Suspense, Fragment } from "react"
 import Link from "next/link"
 import Image from "next/image"
 
@@ -21,6 +21,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Instagram,
+  User,
 } from "lucide-react"
 import { useLanguage } from "@/context/language-context"
 import { useMobile } from "@/hooks/use-mobile"
@@ -32,6 +33,7 @@ export type Barber = {
   instagram: string
   imgSrc: string
   bio: string
+  languages?: string[]
 }
 
 type Theme = "light" | "dark"
@@ -48,7 +50,14 @@ const barbersData: Barber[] = [
     name: "Dominik \"Rynik\" Rybár",
     instagram: "https://www.instagram.com/ry.nik_/",
     imgSrc: "/photos/rynik.jpeg", // Updated image path
-    bio: 'Volám sa Dominik "Rynik" Rybar, som barber, ktorý miluje moderné účesy a precíznu prácu s nožnicami aj strojčekom. Barberingu sa venujem od strednej školy. Svoje zručnosti som zdokonaľoval na prestížnych školeniach pod vedením odborníkov ako Alan Beak, Hayden Cassidy a Menspire a mnoho ďalších. Vďaka týmto skúsenostiam prinášam klientom nielen štýlové a precízne strihy, ale aj individuálny prístup a servis na najvyššej úrovni. V INNOSTUDIO spájam minimalizmus s kvalitou, aby každý od nás odchádzal sebavedomý a spokojný.',
+    bio: 'Volám sa Dominik "Rynik" Rybar, som barber, ktorý miluje moderné účesy a precíznu prácu s nožnicami aj strojčekom. Barberingu sa venujem od strednej školy. Svoje zručnosti som zdokonaľoval na prestížnych školeniach pod vedením odborníkov ako Alan Beak, Hayden Cassidy a Menspire. Vďaka týmto skúsenostiam prinášam klientom štýlové a precízne strihy, ale aj individuálny prístup a servis na najvyššej úrovni. V INNOSTUDIO spájam minimalizmus s kvalitou, aby každý od nás odchádzal sebavedomý a spokojný.',
+  },
+  {
+    name: 'Marina "Kekso" Krajčik',
+    instagram: "",
+    imgSrc: "",
+    languages: ["SK", "SRB", "EN"],
+    bio: 'Ahojte, moje meno je Marina Krajčik. K barberingu som sa dostala tak, že som najskôr strihala samu seba, neskôr svojho brata a postupne sa z toho stala moja vášeň. Na tejto práci ma najviac baví strihanie strojčekom a tvorba krátkych účesov, kde viem naplno využiť cit pre detail a precíznosť. Každý strih beriem ako príležitosť zlepšovať sa a posúvať sa ďalej. Môžem o sebe povedať, že som trpezlivá, precízna a mám chuť neustále sa učiť. Barbering pre mňa nie je len práca, ale niečo, čo ma naozaj baví. Úspešne som absolvovala beginnerský kurz v INNOACADEMY.',
   },
 ]
 
@@ -293,45 +302,88 @@ const AboutSection = ({
 const PricingSection = () => {
   const { t } = useLanguage()
   
-  // Dynamic pricing data based on current language
-  const pricingData = [
-    { service: t.pricingHaircut, price: "30€", duration: "30 min" },
-    { service: t.pricingCombo, price: "49€", duration: "50 min" },
-    { service: t.pricingBeard, price: "19€", duration: "30 min" },
+  const pricingSections = [
+    {
+      id: "master" as const,
+      title: t.pricingCategoryMaster,
+      rows: [
+        { service: t.pricingHaircut, price: "33€", duration: "30 min" },
+        { service: t.pricingCombo, price: "49€", duration: "50 min" },
+        { service: t.pricingBeard, price: "19€", duration: "30 min" },
+      ],
+    },
+    {
+      id: "junior" as const,
+      title: t.pricingCategoryJunior,
+      rows: [
+        { service: t.pricingHaircut, price: "22€", duration: "70 min" },
+        { service: t.pricingCombo, price: "35€", duration: "105 min" },
+        { service: t.pricingBeard, price: "15€", duration: "45 min" },
+      ],
+    },
   ]
 
   return (
-    <AnimatedSection id="pricing" className="bg-white">
+    <AnimatedSection id="pricing" className="bg-white text-zinc-900">
       <div className="w-full max-w-2xl mx-auto text-center md:text-left">
         <h2 className="text-3xl md:text-4xl font-bold tracking-tight uppercase text-zinc-900">
           {t.pricingTitle}
         </h2>
         <div className="mt-1 mb-8 h-1 w-24 mx-auto md:mx-0 bg-beige-400" />
         <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm">
-          <table className="min-w-full text-left text-sm">
+          <table className="min-w-full text-left text-sm text-zinc-900">
             <thead>
-              <tr>
-                <th className="px-6 py-4 font-semibold text-zinc-700 uppercase tracking-wider">
+              <tr className="text-zinc-900">
+                <th className="px-6 py-4 font-semibold text-zinc-800 uppercase tracking-wider">
                   {t.pricingService}
                 </th>
-                <th className="px-6 py-4 font-semibold text-zinc-700 uppercase tracking-wider text-right">
+                <th className="px-6 py-4 font-semibold text-zinc-800 uppercase tracking-wider text-right">
                   {t.pricingPrice}
                 </th>
-                <th className="px-6 py-4 font-semibold text-zinc-700 uppercase tracking-wider text-right hidden md:table-cell">
+                <th className="px-6 py-4 font-semibold text-zinc-800 uppercase tracking-wider text-right hidden md:table-cell">
                   {t.pricingDuration}
                 </th>
               </tr>
             </thead>
             <tbody>
-              {pricingData.map((item, idx) => (
-                <tr key={item.service} className="border-t last:border-b-0 border-gray-100 hover:bg-beige-50 transition-colors">
-                  <td className="px-6 py-4 whitespace-nowrap text-zinc-900 font-medium">{item.service}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-zinc-700 text-right">
-                    <span className="md:hidden">{item.price} <span className="text-gray-400">·</span> <span>{item.duration}</span></span>
-                    <span className="hidden md:inline">{item.price}</span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-zinc-700 text-right hidden md:table-cell">{item.duration}</td>
-                </tr>
+              {pricingSections.map((section) => (
+                <Fragment key={section.id}>
+                  {/* Mobile: 2 visible columns — colspan 2 so the category label is visible */}
+                  <tr className="border-t border-gray-200 bg-beige-200 md:hidden">
+                    <td
+                      colSpan={2}
+                      className="px-6 py-3 font-bold text-zinc-950 tracking-wide text-sm"
+                    >
+                      {section.title}
+                    </td>
+                  </tr>
+                  {/* Desktop: full width category row */}
+                  <tr className="hidden border-t border-gray-200 bg-beige-200 md:table-row">
+                    <td
+                      colSpan={3}
+                      className="px-6 py-2 font-bold text-zinc-950 tracking-wide text-sm"
+                    >
+                      {section.title}
+                    </td>
+                  </tr>
+                  {section.rows.map((item) => (
+                    <tr
+                      key={`${section.id}-${item.service}`}
+                      className="border-t border-gray-100 hover:bg-beige-50/60 transition-colors"
+                    >
+                      <td className="px-6 py-4 whitespace-nowrap text-zinc-900 font-medium">{item.service}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-zinc-700 text-right">
+                        <span className="md:hidden">
+                          {item.price} <span className="text-gray-400">·</span> <span>{item.duration}</span>
+                        </span>
+                        <span className="hidden md:inline">{item.price}</span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-zinc-700 text-right hidden md:table-cell">
+                        {item.duration}
+                      </td>
+                    </tr>
+                  ))}
+                </Fragment>
               ))}
             </tbody>
           </table>
@@ -470,11 +522,11 @@ const BarbersSection = ({ theme }: { theme: Theme }) => {
       <div id="barbers" className="container mx-auto text-center">
         <h2 className={`text-3xl md:text-4xl font-bold tracking-tight uppercase ${headingColor}`}>{t.barbersTitle}</h2>
         <div className={`mt-4 h-1 w-24 mx-auto ${hrColor}`} />
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12 max-w-4xl mx-auto">
-          {barbersData.slice(0, 2).map((barber, index) => (
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 lg:gap-x-10 gap-y-12 max-w-7xl mx-auto">
+          {barbersData.map((barber, index) => (
             <motion.div
               key={barber.name}
-              className="relative overflow-hidden flex flex-col items-center h-[40rem] pt-12 group"
+              className="relative overflow-hidden flex flex-col items-center w-full h-[40rem] md:h-[43rem] lg:h-[44rem] pt-12 group"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.5 }}
@@ -486,34 +538,53 @@ const BarbersSection = ({ theme }: { theme: Theme }) => {
                 onClick={() => handleToggle(barber.name)}
               >
                 <div className={`relative h-96 w-64 rounded-none overflow-hidden border-4 ${cardBorderColor} group-hover:border-beige-400 transition-all duration-300 transform group-hover:scale-105 md:w-64 w-full max-w-xs sm:max-w-sm`}>
-                  <Image
-                    src={barber.imgSrc || "/placeholder.svg"}
-                    alt={`Portrait of ${barber.name}`}
-                    fill
-                    style={{ objectFit: "cover" }}
-                    className="grayscale group-hover:grayscale-0 transition-all duration-500 ease-in-out group-hover:scale-110"
-                  />
+                  {barber.imgSrc?.trim() ? (
+                    <Image
+                      src={barber.imgSrc}
+                      alt={`Portrait of ${barber.name}`}
+                      fill
+                      style={{ objectFit: "cover" }}
+                      className="grayscale group-hover:grayscale-0 transition-all duration-500 ease-in-out group-hover:scale-110"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center bg-zinc-300">
+                      <User className="h-28 w-28 text-zinc-400" strokeWidth={1.15} aria-hidden="true" />
+                    </div>
+                  )}
                   <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out">
                     <p className="text-5xl text-black opacity-30 font-black drop-shadow-lg">Detail</p>
                   </div>
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors duration-300" />
                 </div>
                 <h3 className={`mt-6 text-xl font-bold tracking-wide ${barberNameColor}`}>{barber.name}</h3>
-                <a
-                  href={barber.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-2 flex items-center gap-2 text-pink-500 hover:text-pink-600 transition-colors"
-                  onClick={e => e.stopPropagation()}
-                  aria-label={`Instagram ${barber.name}`}
-                >
-                  <Instagram size={24} />
-                  <span className="sr-only">Instagram</span>
-                </a>
-                <div className="flex flex-row gap-3 pt-2 justify-center">
-                          <p className="text-gray-400">SK</p>
-                          <p className="text-gray-400">EN</p>
-                        </div>
+                {barber.instagram ? (
+                  <a
+                    href={barber.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2 flex items-center justify-center text-pink-500 hover:text-pink-600 transition-colors"
+                    onClick={e => e.stopPropagation()}
+                    aria-label={`Instagram ${barber.name}`}
+                  >
+                    <Instagram size={24} />
+                    <span className="sr-only">Instagram</span>
+                  </a>
+                ) : (
+                  <span
+                    className="mt-2 inline-flex items-center justify-center text-pink-500"
+                    aria-label="Instagram"
+                  >
+                    <Instagram size={24} />
+                    <span className="sr-only">Instagram</span>
+                  </span>
+                )}
+                <div className="flex flex-row flex-wrap gap-3 pt-2 justify-center">
+                  {(barber.languages ?? ["SK", "EN"]).map((lang) => (
+                    <p key={lang} className="text-gray-400">
+                      {lang}
+                    </p>
+                  ))}
+                </div>
               </div>
               <AnimatePresence>
                 {expandedBarber === barber.name && (
@@ -522,36 +593,50 @@ const BarbersSection = ({ theme }: { theme: Theme }) => {
                     animate={{ opacity: 1, y: "0%" }}
                     exit={{ opacity: 0, y: "100%" }}
                     transition={{ duration: 0.4, ease: "easeInOut" }}
-                    className="absolute inset-0 bg-zinc-900/95 p-6 text-white flex flex-col justify-between items-center text-center overflow-y-auto max-h-full md:rounded-lg w-full md:w-auto"
+                    className="absolute inset-0 bg-zinc-900/95 px-3 py-6 sm:px-5 md:p-6 text-white flex flex-col justify-between items-center text-center overflow-y-auto max-h-full md:rounded-lg w-full md:w-auto"
                     style={{ WebkitOverflowScrolling: 'touch' }}
                   >
                     <>
-                      <div className="flex flex-col items-center text-center w-full max-w-md">
+                      <div className="flex flex-col items-center text-center w-full md:max-w-md">
                         <h3 className="text-3xl font-bold tracking-tight text-white mb-2">{barber.name}</h3>
-                        <a
-                          href={barber.instagram}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="mb-4 flex items-center gap-2 pt-2 text-pink-500 hover:text-pink-600 transition-colors"
-                          aria-label={`Instagram ${barber.name}`}
-                          onClick={e => e.stopPropagation()}
-                        >
-                          <Instagram size={24} />
-                          <span className="sr-only">Instagram</span>
-                        </a>
-                        <div className="flex flex-row gap-2 justify-center">
-                          <p className="text-gray-400">SK</p>
-                          <p className="text-gray-400">EN</p>
+                        {barber.instagram ? (
+                          <a
+                            href={barber.instagram}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mb-4 flex items-center justify-center gap-2 pt-2 text-pink-500 hover:text-pink-600 transition-colors"
+                            aria-label={`Instagram ${barber.name}`}
+                            onClick={e => e.stopPropagation()}
+                          >
+                            <Instagram size={24} />
+                            <span className="sr-only">Instagram</span>
+                          </a>
+                        ) : (
+                          <span className="mb-4 inline-flex items-center justify-center pt-2 text-pink-500" aria-label="Instagram">
+                            <Instagram size={24} />
+                            <span className="sr-only">Instagram</span>
+                          </span>
+                        )}
+                        <div className="flex flex-row flex-wrap gap-2 justify-center">
+                          {(barber.languages ?? ["SK", "EN"]).map((lang) => (
+                            <p key={lang} className="text-gray-400">
+                              {lang}
+                            </p>
+                          ))}
                         </div>
                         <div className="my-3 h-px w-20 bg-gray-500 mx-auto" />
                       </div>
-                      <div className="w-full max-w-md text-center py-4 my-4">
+                      <div className="w-full md:max-w-md text-center py-4 my-4">
                         <h4 className="font-semibold text-sm uppercase tracking-wider text-gray-400 mb-2">
                           {t.drawerBio}
                         </h4>
-                        <p className="text-gray-200 text-base leading-relaxed">{barber.bio}</p>
+                        <div className="text-gray-200 text-base leading-relaxed space-y-4">
+                          {barber.bio.split("\n\n").map((paragraph, i) => (
+                            <p key={i}>{paragraph}</p>
+                          ))}
+                        </div>
                       </div>
-                      <div className="w-full max-w-md mt-4">
+                      <div className="w-full md:max-w-md mt-4">
                         <Button
                           variant="outline"
                           size="lg"
@@ -909,7 +994,9 @@ export function ClientPage() {
             sideImagePosition="right"
           />
         </div>
-        <PricingSection />
+        <div className="bg-white text-zinc-900">
+          <PricingSection />
+        </div>
         {!isMobile && (
           <ParallaxBanner
             bgImage="/banner-bg.png"

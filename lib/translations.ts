@@ -49,6 +49,8 @@ export const translations = {
     pricingHaircut: "Men's Haircut",
     pricingCombo: "Combo Haircut + Beard",
     pricingBeard: "Beard Trim",
+    pricingCategoryMaster: "MASTER barber",
+    pricingCategoryJunior: "JUNIOR barber",
 
    // Academy page translations
    academyHeroTitle: "Educate. Inspire.",
@@ -77,6 +79,7 @@ export const translations = {
    academyFormMessage: "Your message (optional)",
    academyFormSubmit: "Apply Now",
    academyFormRequired: "Required",
+   academyCoursePopularBadge: "Popular",
    
    // Career page translations
    careerHeroTitle: "Join Our Team",
@@ -153,10 +156,12 @@ export const translations = {
     pricingSubtitle: "Transparentné, férové ceny pre každú službu. Žiadne prekvapenia.",
     pricingService: "Služba",
     pricingPrice: "Cena",
-    pricingDuration: "Doba",
+    pricingDuration: "Trvanie",
     pricingHaircut: "Pánsky strih",
     pricingCombo: "Combo strih + brada",
     pricingBeard: "Úprava brady",
+    pricingCategoryMaster: "MASTER barber",
+    pricingCategoryJunior: "JUNIOR barber",
     // Academy page translations
     academyHeroTitle: "Educate. Inspire.",
     academyHeroSubtitle: "Ovládnite remeslo holičstva s personalizovaným vzdelávaním od odborníkov z praxe.",
@@ -184,6 +189,7 @@ export const translations = {
     academyFormMessage: "Správa (Nepovinné)",
     academyFormSubmit: "Prihlásiť sa",
     academyFormRequired: "Povinné",
+    academyCoursePopularBadge: "Obľúbené",
     
     // Career page translations
     careerHeroTitle: "Pridaj sa k nášmu tímu",

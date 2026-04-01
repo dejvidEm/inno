@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Manrope } from "next/font/google" // Changed from Inter to Manrope
 import "./globals.css"
 import { LanguageProvider } from "@/context/language-context"
+import { SiteAnnouncementModal } from "@/components/site-announcement-modal"
 
 const manrope = Manrope({
   // Changed from Inter to Manrope
@@ -56,7 +57,10 @@ export default function RootLayout({
       <body className={`${manrope.className} antialiased`}>
         {" "}
         {/* Applied Manrope and antialiasing */}
-        <LanguageProvider>{children}</LanguageProvider>
+        <LanguageProvider>
+          {children}
+          <SiteAnnouncementModal />
+        </LanguageProvider>
       </body>
     </html>
   )

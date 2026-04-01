@@ -15,7 +15,6 @@ import {
   Mail,
   ArrowDown,
   GraduationCap,
-  Users,
   User,
   ChevronRight,
   ChevronLeft,
@@ -373,22 +372,36 @@ const TrainingOptionsSection = ({ theme }: { theme: Theme }) => {
           </motion.div>
 
           <motion.div
-            className={`${cardBgColor} group rounded-lg shadow-lg border-2 ${cardBorderColor} p-8 text-left hover:border-beige-400 transition-colors duration-300 relative overflow-hidden`}
+            className={`${cardBgColor} group rounded-lg shadow-lg border-2 ${cardBorderColor} p-8 pt-10 text-left hover:border-beige-400 transition-colors duration-300 relative overflow-visible`}
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.5 }}
           >
+            <span
+              className={`absolute left-1/2 top-0 z-20 -translate-x-1/2 -translate-y-1/2 inline-flex items-center rounded-full bg-beige-400 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white shadow-md ring-2 ${theme === "light" ? "ring-white" : "ring-zinc-800"}`}
+              aria-label={t.academyCoursePopularBadge}
+            >
+              {t.academyCoursePopularBadge}
+            </span>
+            {/* Clips decorative circle to card corners; outer card stays overflow-visible for badge */}
             <div
-              className="pointer-events-none absolute top-0 right-0 w-20 h-20 bg-beige-400/10 rounded-full -translate-y-10 translate-x-10 origin-top-right transform-gpu will-change-transform transition-transform duration-300 ease-out group-hover:scale-125"
+              className="pointer-events-none absolute inset-0 z-0 overflow-hidden rounded-lg"
               aria-hidden="true"
-            />
+            >
+              <div className="absolute top-0 right-0 w-20 h-20 bg-beige-400/10 rounded-full -translate-y-10 translate-x-10 origin-top-right transform-gpu will-change-transform transition-transform duration-300 ease-out group-hover:scale-125" />
+            </div>
             <div className="relative z-10">
-              <div className="flex items-center justify-between mb-6">
-                <Users className="h-12 w-12 text-beige-400 transform-gpu will-change-transform transition-transform duration-300 ease-out group-hover:-translate-y-2 group-hover:translate-x-2 group-hover:-rotate-6 group-hover:scale-110" />
-                <div className="text-right">
-                  <div className={`text-2xl font-bold ${optionTitleColor}`}>€1,490</div>
-                  <div className={`text-sm ${optionTextColor}`}>za osobu</div>
+              <div className="flex items-center justify-between mb-6 gap-4">
+                <Scissors className="h-12 w-12 shrink-0 text-beige-400 transform-gpu will-change-transform transition-transform duration-300 ease-out group-hover:-translate-y-2 group-hover:translate-x-2 group-hover:-rotate-6 group-hover:scale-110" />
+                <div className="text-right flex flex-wrap items-baseline justify-end gap-x-3 gap-y-1 min-w-0">
+                  <span className={`text-lg sm:text-xl font-semibold line-through opacity-60 ${optionTextColor}`}>
+                    €1,490
+                  </span>
+                  <div>
+                    <div className={`text-2xl font-bold ${optionTitleColor}`}>€1,190</div>
+                    <div className={`text-sm ${optionTextColor}`}>za osobu</div>
+                  </div>
                 </div>
               </div>
               <h3 className={`text-2xl font-bold ${optionTitleColor} mb-4`}>BEGINNER COURSE</h3>
