@@ -54,7 +54,7 @@ const barbersData: Barber[] = [
   },
   {
     name: 'Marina "Kekso" Krajčik',
-    instagram: "",
+    instagram: "https://www.instagram.com/kekso7_/",
     imgSrc: "",
     languages: ["SK", "SRB", "EN"],
     bio: 'Ahojte, moje meno je Marina Krajčik. K barberingu som sa dostala tak, že som najskôr strihala samu seba, neskôr svojho brata a postupne sa z toho stala moja vášeň. Na tejto práci ma najviac baví strihanie strojčekom a tvorba krátkych účesov, kde viem naplno využiť cit pre detail a precíznosť. Každý strih beriem ako príležitosť zlepšovať sa a posúvať sa ďalej. Môžem o sebe povedať, že som trpezlivá, precízna a mám chuť neustále sa učiť. Barbering pre mňa nie je len práca, ale niečo, čo ma naozaj baví. Úspešne som absolvovala beginnerský kurz v INNOACADEMY.',
