@@ -55,7 +55,7 @@ const barbersData: Barber[] = [
   {
     name: 'Marina "Kekso" Krajčik',
     instagram: "https://www.instagram.com/kekso7_/",
-    imgSrc: "",
+    imgSrc: "/photos/new_barber.jpeg",
     languages: ["SK", "SRB", "EN"],
     bio: 'Ahojte, moje meno je Marina Krajčik. K barberingu som sa dostala tak, že som najskôr strihala samu seba, neskôr svojho brata a postupne sa z toho stala moja vášeň. Na tejto práci ma najviac baví strihanie strojčekom a tvorba krátkych účesov, kde viem naplno využiť cit pre detail a precíznosť. Každý strih beriem ako príležitosť zlepšovať sa a posúvať sa ďalej. Môžem o sebe povedať, že som trpezlivá, precízna a mám chuť neustále sa učiť. Barbering pre mňa nie je len práca, ale niečo, čo ma naozaj baví. Úspešne som absolvovala beginnerský kurz v INNOACADEMY.',
   },
@@ -279,7 +279,7 @@ const AboutSection = ({
     <AnimatedSection
       id="about"
       theme={theme}
-      sideImageSrc={"/priestory/about.jpeg"}
+      sideImageSrc={sideImageSrc ?? "/photos/image2.jpeg"}
       sideImageAlt={sideImageAlt}
       sideImagePosition={sideImagePosition}
     >
@@ -786,7 +786,7 @@ const ContactSection = ({
     <AnimatedSection
       id="contact"
       theme={theme}
-      sideImageSrc={"/priestory/image2.jpeg"}
+      sideImageSrc={sideImageSrc ?? "/photos/image1.jpeg"}
       sideImageAlt={sideImageAlt}
       sideImagePosition={sideImagePosition}
     >
@@ -989,7 +989,7 @@ export function ClientPage() {
         <div className="bg-white text-zinc-900">
           <AboutSection
             theme="light"
-            sideImageSrc="/placeholder.svg?width=400&height=600"
+            sideImageSrc="/photos/image2.jpeg"
             sideImageAlt="Minimalist barbershop tools"
             sideImagePosition="right"
           />
@@ -1014,7 +1014,7 @@ export function ClientPage() {
         <Suspense fallback={null}>
         <ContactSection
             theme="light"
-            sideImageSrc="/placeholder.svg?width=400&height=600"
+            sideImageSrc="/photos/image1.jpeg"
             sideImageAlt="Abstract architectural lines"
             sideImagePosition="left"
           />
