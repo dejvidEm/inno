@@ -27,6 +27,7 @@ import { useLanguage } from "@/context/language-context"
 import { useMobile } from "@/hooks/use-mobile"
 import type translations from "@/data/translations"
 import { SharedHeader } from "@/components/shared-header"
+import { BOOKING_URL } from "@/lib/booking"
 
 export type Barber = {
   name: string
@@ -829,7 +830,7 @@ const BookNowButton = ({ isCtaVisible }: { isCtaVisible: boolean }) => {
             size="lg"
             className="bg-white text-black hover:bg-gray-200 rounded-full shadow-lg font-bold uppercase tracking-wider"
           >
-            <Link href="https://services.bookio.com/inno-studio/widget?lang=sk&fbclid=IwZXh0bgNhZW0CMTAAYnJpZBExRXQ2cll4cUNzTmVaalFEdwEeTmb7mAfmDSaY1TLHQS4seOYe-kBBufPJEBXbfxjAwMBkX1D5ThshZk81_CM_aem_5LLVmnf8SNa7ShPD8mf2bQ" target="_blank" rel="noopener noreferrer">
+            <Link href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
               {t.bookNow}
             </Link>
           </Button>
@@ -878,7 +879,7 @@ const CallToActionBanner = ({ outerRef }: { outerRef?: React.Ref<HTMLDivElement>
           size="lg"
           className="mt-10 bg-white text-black hover:bg-gray-200 font-bold uppercase tracking-wider px-10 py-4 text-lg"
         >
-          <Link href="https://services.bookio.com/inno-studio/widget?lang=sk&fbclid=IwZXh0bgNhZW0CMTAAYnJpZBExRXQ2cll4cUNzTmVaalFEdwEeTmb7mAfmDSaY1TLHQS4seOYe-kBBufPJEBXbfxjAwMBkX1D5ThshZk81_CM_aem_5LLVmnf8SNa7ShPD8mf2bQ" target="_blank" rel="noopener noreferrer">
+          <Link href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
             {t.ctaBannerButton}
           </Link>
         </Button>
@@ -1003,7 +1004,7 @@ export function ClientPage() {
             title={t.banner1Title}
             text={t.banner1Text}
             buttonText={t.bookNow}
-            buttonLink="https://services.bookio.com/inno-studio/widget?lang=sk&fbclid=IwZXh0bgNhZW0CMTAAYnJpZBExRXQ2cll4cUNzTmVaalFEdwEeTmb7mAfmDSaY1TLHQS4seOYe-kBBufPJEBXbfxjAwMBkX1D5ThshZk81_CM_aem_5LLVmnf8SNa7ShPD8mf2bQ"
+            buttonLink={BOOKING_URL}
           />
         )}
         <div className="bg-white text-zinc-900">
