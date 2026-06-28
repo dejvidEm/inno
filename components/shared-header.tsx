@@ -4,7 +4,6 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-motion"
 import {
   Menu,
   DoorClosedIcon as CloseIcon,
@@ -88,18 +87,9 @@ export const SharedHeader = () => {
     return () => window.removeEventListener("hashchange", handleRouteChange, false)
   }, [])
 
-  const [scrolled, setScrolled] = useState(false)
-  const { scrollY } = useScroll()
-  useMotionValueEvent(scrollY, "change", (latest) => setScrolled(latest > 10))
-
   return (
     <>
-      <motion.header
-        className={"fixed top-0 left-0 right-0 z-[60] px-4 py-3 md:px-6 bg-black/90 backdrop-blur-sm transition-colors duration-300"}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-      >
+      <header className="fixed top-0 left-0 right-0 z-[60] px-4 py-3 md:px-6 bg-black/90 backdrop-blur-sm">
         <div className="container mx-auto flex items-center justify-between relative">
           {/* Logo left */}
           <div className="flex-1 flex items-center min-w-0">
@@ -126,43 +116,35 @@ export const SharedHeader = () => {
             <LanguageSwitcher className="hidden sm:flex z-[61]" />
             {/* Mobile burger menu button */}
             {isMobile && (
-              <motion.button
+              <button
                 onClick={toggleMenu}
                 className="text-white z-[61] p-2"
-                whileTap={{ scale: 0.9 }}
                 aria-label="Toggle menu"
               >
                 {isMenuOpen ? <CloseIcon size={28} /> : <Menu size={28} />}
-              </motion.button>
+              </button>
             )}
           </div>
         </div>
-      </motion.header>
+      </header>
       {/* Mobile menu overlay */}
-      <AnimatePresence>
-        {isMenuOpen && isMobile && (
-          <motion.div
-            className="fixed top-20 left-0 right-0 bg-black/80 backdrop-blur-md z-50 p-4 shadow-lg"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-          >
-            <nav className="flex flex-col items-center gap-4">
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="text-gray-200 hover:text-white transition-colors text-lg py-2"
-                  onClick={closeMenu}
-                >
-                  {item.label}
-                </Link>
-              ))}
-              <LanguageSwitcher className="sm:hidden mt-2" />
-            </nav>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {isMenuOpen && isMobile && (
+        <div className="fixed top-20 left-0 right-0 bg-black/80 backdrop-blur-md z-50 p-4 shadow-lg">
+          <nav className="flex flex-col items-center gap-4">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="text-gray-200 hover:text-white transition-colors text-lg py-2"
+                onClick={closeMenu}
+              >
+                {item.label}
+              </Link>
+            ))}
+            <LanguageSwitcher className="sm:hidden mt-2" />
+          </nav>
+        </div>
+      )}
     </>
   )
 }

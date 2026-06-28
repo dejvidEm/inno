@@ -5,7 +5,7 @@ import { useState, useEffect, useRef, Suspense, Fragment } from "react"
 import Link from "next/link"
 import Image from "next/image"
 
-import { motion, useScroll, useTransform, AnimatePresence, useMotionValueEvent, useInView } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import GoogleMap from '@/components/Map';
 import {
@@ -24,7 +24,6 @@ import {
   User,
 } from "lucide-react"
 import { useLanguage } from "@/context/language-context"
-import { useMobile } from "@/hooks/use-mobile"
 import type translations from "@/data/translations"
 import { SharedHeader } from "@/components/shared-header"
 import { BOOKING_URL } from "@/lib/booking"
@@ -35,6 +34,8 @@ export type Barber = {
   imgSrc: string
   bio: string
   languages?: string[]
+  /** Jemné priblíženie fotky, ak je oproti ostatným príliš oddialená */
+  imgZoom?: number
 }
 
 type Theme = "light" | "dark"
@@ -44,21 +45,22 @@ const barbersData: Barber[] = [
   {
     name: "Lukáš \"Lucas\" Kocian",
     instagram: "https://www.instagram.com/lukaskocian_/",
-    imgSrc: "/photos/lukas.jpeg", // Updated image path
+    imgSrc: "/photos/lukas.jpeg",
+    imgZoom: 1.15,
     bio: 'Ahojte, moje meno je Lukáš "Lucas" Kocian. Pochádzam zo Žiliny a barberingu sa venujem od roku 2020. Môžem o sebe povedať, že som veľmi kreatívny workoholik a mám veľký cit pre detail. Na barberingu ma zaujala práca s ľuďmi, kreativita a nekonečné zlepšovanie sa v tomto remesle. Barbering je pre mňa životný štýl. Neexistuje strih, ktorý strihám najradšej. Či je to strojčekový alebo nožnicový strih, každý jeden mám v obľube. Úspešne som absolvoval školenia od Alana Beaka a Hayden Cassidy a od tímu MENSPIRE.',
   },
   {
     name: "Dominik \"Rynik\" Rybár",
     instagram: "https://www.instagram.com/ry.nik_/",
-    imgSrc: "/photos/rynik.jpeg", // Updated image path
+    imgSrc: "/photos/rynik.jpeg",
+    imgZoom: 1.15,
     bio: 'Volám sa Dominik "Rynik" Rybar, som barber, ktorý miluje moderné účesy a precíznu prácu s nožnicami aj strojčekom. Barberingu sa venujem od strednej školy. Svoje zručnosti som zdokonaľoval na prestížnych školeniach pod vedením odborníkov ako Alan Beak, Hayden Cassidy a Menspire. Vďaka týmto skúsenostiam prinášam klientom štýlové a precízne strihy, ale aj individuálny prístup a servis na najvyššej úrovni. V INNOSTUDIO spájam minimalizmus s kvalitou, aby každý od nás odchádzal sebavedomý a spokojný.',
   },
   {
-    name: 'Marina "Kekso" Krajčik',
-    instagram: "https://www.instagram.com/kekso7_/",
-    imgSrc: "/photos/new_barber.jpeg",
-    languages: ["SK", "SRB", "EN"],
-    bio: 'Ahojte, moje meno je Marina Krajčik. K barberingu som sa dostala tak, že som najskôr strihala samu seba, neskôr svojho brata a postupne sa z toho stala moja vášeň. Na tejto práci ma najviac baví strihanie strojčekom a tvorba krátkych účesov, kde viem naplno využiť cit pre detail a precíznosť. Každý strih beriem ako príležitosť zlepšovať sa a posúvať sa ďalej. Môžem o sebe povedať, že som trpezlivá, precízna a mám chuť neustále sa učiť. Barbering pre mňa nie je len práca, ale niečo, čo ma naozaj baví. Úspešne som absolvovala beginnerský kurz v INNOACADEMY.',
+    name: 'Samuel "Ďamo" Brinza',
+    instagram: "",
+    imgSrc: "/photos/damo.jpeg",
+    bio: "Ahojte, moje meno je Samuel Brinza, no väčšina ľudí ma pozná pod prezývkou „Ďamo“. Barberingu sa venujem s vášňou, dôrazom na detail a chuťou neustále sa zlepšovať. Táto práca ma baví najmä preto, že spája kreativitu, kontakt s ľuďmi a možnosť vytvoriť každému klientovi strih, ktorý mu naozaj sadne.\n\nAbsolvoval som rozsiahle školenie v INNO Studio, kde som získal nové skúsenosti, naučil sa moderné techniky a posunul svoj pohľad na profesionálny barbering. Každý strih beriem individuálne – či už ide o fade, klasický pánsky strih alebo úpravu brady, vždy si dávam záležať na čistom a precíznom výsledku.\n\nBarbering je pre mňa viac než len práca. Je to remeslo, štýl a cesta neustáleho zlepšovania. Mojím cieľom je, aby sa každý klient cítil dobre počas celej návštevy a odchádzal spokojný so strihom, ktorý vystihuje jeho osobnosť.",
   },
 ]
 
@@ -93,69 +95,34 @@ const AnimatedSection = ({
   sideImagePosition?: "left" | "right"
   theme?: "light" | "dark"
 }) => {
-  const sectionRef = useRef<HTMLDivElement | null>(null)
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  })
-
-  const imageX = useTransform(scrollYProgress, [0.15, 0.5], sideImagePosition === "left" ? [-100, 0] : [100, 0])
-  const imageOpacity = useTransform(scrollYProgress, [0.15, 0.4], [0, 1])
-  const borderPathLength = useTransform(scrollYProgress, [0.25, 0.6], [0, 1])
-
   const hasSideImage = Boolean(sideImageSrc)
-  const designElementAccentColor = theme === "light" ? "bg-beige-400" : "bg-beige-200"
-  const imageBorderColor = theme === "light" ? "#000000" : "#000000"
-
-  const scale = useTransform(scrollYProgress, [0.3, 0.5], [0, 1])
-  const opacity = useTransform(scrollYProgress, [0.3, 0.5], [0, 0.7])
 
   return (
-    <motion.section
-      ref={sectionRef}
+    <section
       id={id}
       className={`relative w-full py-20 md:py-32 px-4 md:px-6 overflow-x-hidden ${className}`}
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
     >
       <div
         className={`container mx-auto flex flex-col md:flex-row gap-12 lg:gap-24 items-center ${sideImagePosition === "left" ? "md:flex-row-reverse" : "md:flex-row"}`}
       >
         <div className={hasSideImage ? "w-full md:w-1/2" : "w-full"}>{children}</div>
         {hasSideImage && sideImageSrc && (
-          <motion.div
+          <div
             className="w-full md:w-1/2 flex items-center justify-center mt-12 md:mt-0"
-            style={{ x: imageX, opacity: imageOpacity }}
           >
             <div className="relative w-[280px] h-[420px] sm:w-[300px] sm:h-[450px] lg:w-[400px] lg:h-[555px]">
               <Image
                 src={sideImageSrc || "/placeholder.svg"}
                 alt={sideImageAlt}
                 fill
+                sizes="(max-width: 640px) 280px, (max-width: 1024px) 300px, 400px"
                 className="object-cover rounded-sm shadow-xl"
               />
-              <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 150" preserveAspectRatio="none">
-                <motion.rect
-                  x="1"
-                  y="1"
-                  width="98"
-                  height="148"
-                  stroke={imageBorderColor}
-                  strokeWidth="0.5"
-                  fill="none"
-                  rx="2"
-                  initial={{ pathLength: 0 }}
-                  style={{ pathLength: borderPathLength }}
-                  transition={{ duration: 0.8, ease: "easeInOut" }}
-                />
-              </svg>
             </div>
-          </motion.div>
+          </div>
         )}
       </div>
-    </motion.section>
+    </section>
   )
 }
 
@@ -188,66 +155,35 @@ const LanguageSwitcher = ({ className = "" }: { className?: string }) => {
 
 const HeroSection = () => {
   const { t } = useLanguage()
-  const targetRef = useRef<HTMLDivElement | null>(null)
-  const { scrollYProgress } = useScroll({ target: targetRef, offset: ["start start", "end start"] })
-  const parallaxY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
-  const designElementSwipeOutRange = [0, 0.3]
-  const xLeftLine = useTransform(scrollYProgress, designElementSwipeOutRange, ["0%", "-200%"])
-  const xRightLine = useTransform(scrollYProgress, designElementSwipeOutRange, ["0%", "200%"])
-  const yBottomLine = useTransform(scrollYProgress, designElementSwipeOutRange, ["0%", "300%"])
-  const opacityElements = useTransform(scrollYProgress, designElementSwipeOutRange, [1, 0])
 
   return (
-    <section id="hero" ref={targetRef} className="relative h-screen w-full overflow-hidden">
-      <motion.div
+    <section id="hero" className="relative h-screen w-full overflow-hidden">
+      <div
         className="absolute inset-0 z-0"
         style={{
           backgroundImage: `url(/old-cement-wall-texture.avif)`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          y: parallaxY,
         }}
       />
       <div className="absolute inset-0 bg-black/60 z-10" />
-      <motion.div
-        className="absolute top-1/2 left-8 md:left-12 w-0.5 h-1/4 bg-white"
-        style={{ y: "-50%", x: xLeftLine, opacity: opacityElements }}
-        aria-hidden="true"
-      />
-      <motion.div
-        className="absolute top-1/2 right-8 md:right-12 w-0.5 h-1/4 bg-white"
-        style={{ y: "-50%", x: xRightLine, opacity: opacityElements }}
-        aria-hidden="true"
-      />
-      <motion.div
-        className="absolute bottom-8 md:bottom-12 left-1/2 w-16 md:w-24 h-0.5 bg-white"
-        style={{ x: "-50%", y: yBottomLine, opacity: opacityElements }}
-        aria-hidden="true"
-      />
-      <motion.div
-        className="absolute bottom-16 md:bottom-20 left-1/2 text-white"
-        style={{ x: "-50%", y: yBottomLine, opacity: 100 }}
+      <div
+        className="absolute bottom-16 md:bottom-20 left-1/2 -translate-x-1/2 text-white"
         aria-hidden="true"
       >
-        <ArrowDown className="h-10 w-10 animate-bounce text-white"/>
-      </motion.div>
+        <ArrowDown className="h-10 w-10 text-white"/>
+      </div>
       <div className="relative z-20 flex h-full flex-col items-center justify-center text-center text-white px-4">
-        <motion.h1
+        <h1
           className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tighter uppercase"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
         >
           {t.heroTitle}
-        </motion.h1>
-        <motion.p
+        </h1>
+        <p
           className="mt-4 max-w-2xl text-md md:text-xl text-gray-300"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
         >
           {t.heroSubtitle}
-        </motion.p>
+        </p>
       </div>
     </section>
   )
@@ -350,7 +286,7 @@ const PricingSection = () => {
               {pricingSections.map((section) => (
                 <Fragment key={section.id}>
                   {/* Mobile: 2 visible columns — colspan 2 so the category label is visible */}
-                  <tr className="border-t border-gray-200 bg-beige-200 md:hidden">
+                  <tr className="border-t border-gray-200 bg-gray-100 md:hidden">
                     <td
                       colSpan={2}
                       className="px-6 py-3 font-bold text-zinc-950 tracking-wide text-sm"
@@ -359,7 +295,7 @@ const PricingSection = () => {
                     </td>
                   </tr>
                   {/* Desktop: full width category row */}
-                  <tr className="hidden border-t border-gray-200 bg-beige-200 md:table-row">
+                  <tr className="hidden border-t border-gray-200 bg-gray-100 md:table-row">
                     <td
                       colSpan={3}
                       className="px-6 py-2 font-bold text-zinc-950 tracking-wide text-sm"
@@ -370,7 +306,7 @@ const PricingSection = () => {
                   {section.rows.map((item) => (
                     <tr
                       key={`${section.id}-${item.service}`}
-                      className="border-t border-gray-100 hover:bg-beige-50/60 transition-colors"
+                      className="border-t border-gray-100 hover:bg-gray-50 transition-colors"
                     >
                       <td className="px-6 py-4 whitespace-nowrap text-zinc-900 font-medium">{item.service}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-zinc-700 text-right">
@@ -513,10 +449,7 @@ const BarbersSection = ({ theme }: { theme: Theme }) => {
   const handleToggle = (barberName: string) => setExpandedBarber((prev) => (prev === barberName ? null : barberName))
   const headingColor = theme === "light" ? "text-zinc-900" : "text-white"
   const hrColor = theme === "light" ? "bg-zinc-900" : "bg-white" // Changed for light theme consistency
-  const cardBorderColor = theme === "light" ? "border-gray-300" : "border-gray-700"
-  const cardHoverBorderColor = theme === "light" ? "group-hover:border-zinc-900" : "group-hover:border-white"
   const barberNameColor = theme === "light" ? "text-zinc-900" : "text-white"
-  const specialtyColor = theme === "light" ? "text-zinc-600" : "text-gray-400"
 
   return (
     <AnimatedSection>
@@ -538,15 +471,27 @@ const BarbersSection = ({ theme }: { theme: Theme }) => {
                 className="flex flex-col items-center cursor-pointer w-full"
                 onClick={() => handleToggle(barber.name)}
               >
-                <div className={`relative h-96 w-64 rounded-none overflow-hidden border-4 ${cardBorderColor} group-hover:border-beige-400 transition-all duration-300 transform group-hover:scale-105 md:w-64 w-full max-w-xs sm:max-w-sm`}>
+                <div className="relative h-96 w-64 rounded-none overflow-hidden transition-all duration-300 transform group-hover:scale-105 md:w-64 w-full max-w-xs sm:max-w-sm">
                   {barber.imgSrc?.trim() ? (
-                    <Image
-                      src={barber.imgSrc}
-                      alt={`Portrait of ${barber.name}`}
-                      fill
-                      style={{ objectFit: "cover" }}
-                      className="grayscale group-hover:grayscale-0 transition-all duration-500 ease-in-out group-hover:scale-110"
-                    />
+                    <div
+                      className={`absolute inset-0 origin-center transition-transform duration-500 ease-in-out ${
+                        barber.imgZoom
+                          ? "scale-[1.15] group-hover:scale-[1.22]"
+                          : "group-hover:scale-110"
+                      }`}
+                    >
+                      <Image
+                        src={barber.imgSrc}
+                        alt={`Portrait of ${barber.name}`}
+                        fill
+                        sizes="(max-width: 640px) 320px, 256px"
+                        style={{
+                          objectFit: "cover",
+                          objectPosition: barber.imgZoom ? "center 18%" : "center center",
+                        }}
+                        className="grayscale group-hover:grayscale-0 transition-all duration-500 ease-in-out"
+                      />
+                    </div>
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center bg-zinc-300">
                       <User className="h-28 w-28 text-zinc-400" strokeWidth={1.15} aria-hidden="true" />
@@ -659,113 +604,6 @@ const BarbersSection = ({ theme }: { theme: Theme }) => {
   )
 }
 
-const Word = ({
-  children,
-  progress,
-  range,
-}: {
-  children: React.ReactNode
-  progress: any
-  range: [number, number]
-}) => {
-  const opacity = useTransform(progress, range, [0, 1])
-  return (
-    <span className="relative mx-1 lg:mx-2.5">
-      <span className={"absolute opacity-20"}>{children}</span>
-      <motion.span style={{ opacity: opacity }}>{children}</motion.span>
-    </span>
-  )
-}
-
-const ParallaxBanner = ({
-  bgImage,
-  title,
-  text,
-  buttonText,
-  buttonLink,
-}: {
-  bgImage: string
-  title: string
-  text: string
-  buttonText: string
-  buttonLink: string
-}) => {
-  const trackRef = useRef<HTMLDivElement | null>(null)
-  const { scrollYProgress: trackScrollYProgress } = useScroll({
-    target: trackRef,
-    offset: ["start start", "end end"],
-  })
-  const contentOpacity = useTransform(trackScrollYProgress, [0.25, 0.6], [0, 1])
-  const bgParallaxY = useTransform(trackScrollYProgress, [0, 1], ["-15%", "15%"])
-  const words = title.split(" ")
-
-  return (
-    <section ref={trackRef} className="relative h-[200vh] w-full">
-      <div className="sticky top-0 h-screen w-full overflow-hidden">
-        <motion.div
-          className="absolute inset-0 z-0"
-          style={{
-            backgroundImage: `url(${bgImage})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            y: bgParallaxY,
-          }}
-        />
-        <motion.div
-          className="absolute top-1/4 left-8 md:left-16 w-px h-1/2 bg-white"
-          style={{
-            opacity: useTransform(trackScrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]),
-            scaleY: useTransform(trackScrollYProgress, [0.1, 0.4, 0.6, 0.9], [0, 1, 1, 0]),
-            transformOrigin: "top",
-          }}
-          aria-hidden="true"
-        />
-        <motion.div
-          className="absolute top-1/4 right-8 md:right-16 w-px h-1/2 bg-white"
-          style={{
-            opacity: useTransform(trackScrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]),
-            scaleY: useTransform(trackScrollYProgress, [0.15, 0.45, 0.65, 0.95], [0, 1, 1, 0]),
-            transformOrigin: "bottom",
-          }}
-          aria-hidden="true"
-        />
-        <motion.div
-          className="absolute bottom-12 left-1/2 w-1/4 h-px bg-white"
-          style={{
-            x: "-50%",
-            opacity: useTransform(trackScrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]),
-            scaleX: useTransform(trackScrollYProgress, [0.2, 0.5, 0.7, 1], [0, 1, 1, 0]),
-            transformOrigin: "center",
-          }}
-          aria-hidden="true"
-        />
-        <div className="absolute inset-0 bg-black/70 z-10" />
-        <div className="relative z-20 flex h-full flex-col items-center justify-center text-center text-white px-4">
-          <h2 className="text-4xl md:text-5xl font-bold uppercase tracking-tight text-white flex flex-wrap justify-center leading-tight">
-            {words.map((word, i) => {
-              const start = i / words.length
-              const end = start + 1 / words.length
-              return (
-                <Word key={i} progress={trackScrollYProgress} range={[start, end]}>
-                  {word}
-                </Word>
-              )
-            })}
-          </h2>
-          <motion.p className="mt-4 max-w-xl text-lg text-gray-300" style={{ opacity: contentOpacity }}>
-            {text}
-          </motion.p>
-          <motion.div style={{ opacity: contentOpacity }}>
-            <Button asChild size="lg" className="mt-8 bg-white text-black hover:bg-gray-200 font-bold">
-              <Link href={buttonLink} target="_blank">{buttonText}</Link>
-            </Button>
-          </motion.div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
 const ContactSection = ({
   theme,
   sideImageSrc,
@@ -815,58 +653,30 @@ const ContactSection = ({
 
 const BookNowButton = ({ isCtaVisible }: { isCtaVisible: boolean }) => {
   const { t } = useLanguage()
+  if (isCtaVisible) return null
+
   return (
-    <AnimatePresence>
-      {!isCtaVisible && (
-        <motion.div
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0, opacity: 0, transition: { duration: 0.3, ease: "easeIn" } }}
-          transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }} // Adjusted delay for initial appearance
-          className="fixed bottom-6 right-6 z-[60]"
-        >
-          <Button
-            asChild
-            size="lg"
-            className="bg-white text-black hover:bg-gray-200 rounded-full shadow-lg font-bold uppercase tracking-wider"
-          >
-            <Link href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
-              {t.bookNow}
-            </Link>
-          </Button>
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <div className="fixed bottom-6 right-6 z-[60]">
+      <Button
+        asChild
+        size="lg"
+        className="bg-white text-black hover:bg-gray-200 rounded-full shadow-lg font-bold uppercase tracking-wider"
+      >
+        <Link href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
+          {t.bookNow}
+        </Link>
+      </Button>
+    </div>
   )
 }
 
 const CallToActionBanner = ({ outerRef }: { outerRef?: React.Ref<HTMLDivElement> }) => {
   const { t } = useLanguage()
-  const internalSectionRef = useRef<HTMLDivElement | null>(null) // Keep for internal animations
-
-  // Combine refs if outerRef is provided
-  const sectionRef = (node: HTMLDivElement | null) => {
-    internalSectionRef.current = node
-    if (typeof outerRef === "function") {
-      outerRef(node)
-    } else if (outerRef) {
-      ;(outerRef as React.MutableRefObject<HTMLDivElement | null>).current = node
-    }
-  }
-
-  const { scrollYProgress } = useScroll({
-    target: internalSectionRef, // Use internal ref for scroll progress
-    offset: ["start end", "end start"],
-  })
-
-  const opacity = useTransform(scrollYProgress, [0.3, 0.7], [0, 1])
-  const y = useTransform(scrollYProgress, [0.3, 0.7], [50, 0])
 
   return (
-    <motion.section
-      ref={sectionRef} // Apply combined ref here
+    <section
+      ref={outerRef}
       className="bg-zinc-900 text-white py-20 md:py-28"
-      style={{ opacity, y }}
     >
       {/* ... rest of the CTA banner content ... */}
       <div className="container mx-auto text-center px-4">
@@ -884,7 +694,7 @@ const CallToActionBanner = ({ outerRef }: { outerRef?: React.Ref<HTMLDivElement>
           </Link>
         </Button>
       </div>
-    </motion.section>
+    </section>
   )
 }
 
@@ -977,10 +787,21 @@ const Footer = () => {
 export { Footer }
 
 export function ClientPage() {
-  const { t } = useLanguage()
   const ctaBannerRef = useRef<HTMLDivElement | null>(null)
-  const isCtaBannerInView = useInView(ctaBannerRef, { amount: 0.3, once: false })
-  const isMobile = useMobile()
+  const [isCtaBannerInView, setIsCtaBannerInView] = useState(false)
+
+  useEffect(() => {
+    const node = ctaBannerRef.current
+    if (!node) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsCtaBannerInView(entry.isIntersecting),
+      { threshold: 0.3 },
+    )
+
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [])
 
   return (
     <div className="bg-black min-h-screen font-sans">
@@ -998,15 +819,6 @@ export function ClientPage() {
         <div className="bg-white text-zinc-900">
           <PricingSection />
         </div>
-        {!isMobile && (
-          <ParallaxBanner
-            bgImage="/banner-bg.png"
-            title={t.banner1Title}
-            text={t.banner1Text}
-            buttonText={t.bookNow}
-            buttonLink={BOOKING_URL}
-          />
-        )}
         <div className="bg-white text-zinc-900">
           <BarbersSection theme="light" />
         </div>

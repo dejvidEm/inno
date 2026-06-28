@@ -46,14 +46,8 @@ const AnimatedSection = ({
 
   const imageX = useTransform(scrollYProgress, [0.15, 0.5], sideImagePosition === "left" ? [-100, 0] : [100, 0])
   const imageOpacity = useTransform(scrollYProgress, [0.15, 0.4], [0, 1])
-  const borderPathLength = useTransform(scrollYProgress, [0.25, 0.6], [0, 1])
 
   const hasSideImage = Boolean(sideImageSrc)
-  const designElementAccentColor = theme === "light" ? "bg-beige-400" : "bg-beige-200"
-  const imageBorderColor = theme === "light" ? "#3f3f46" : "#e5e7eb"
-
-  const scale = useTransform(scrollYProgress, [0.3, 0.5], [0, 1])
-  const opacity = useTransform(scrollYProgress, [0.3, 0.5], [0, 0.7])
 
   return (
     <motion.section
@@ -81,31 +75,6 @@ const AnimatedSection = ({
                 fill
                 loading="lazy"
                 className="object-cover rounded-sm shadow-xl"
-              />
-              <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 150" preserveAspectRatio="none">
-                <motion.rect
-                  x="1"
-                  y="1"
-                  width="98"
-                  height="148"
-                  stroke={imageBorderColor}
-                  strokeWidth="0.5"
-                  fill="none"
-                  rx="2"
-                  initial={{ pathLength: 0 }}
-                  style={{ pathLength: borderPathLength }}
-                  transition={{ duration: 0.8, ease: "easeInOut" }}
-                />
-              </svg>
-              <motion.div
-                className={`absolute -top-2.5 -left-2.5 w-5 h-5 ${designElementAccentColor} opacity-70`}
-                initial={{ scale: 0, opacity: 0 }}
-                style={{ scale, opacity }}
-              />
-              <motion.div
-                className={`absolute -bottom-2.5 -right-2.5 w-5 h-5 ${designElementAccentColor} opacity-70`}
-                initial={{ scale: 0, opacity: 0 }}
-                style={{ scale, opacity }}
               />
             </div>
           </motion.div>

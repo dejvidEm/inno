@@ -17,7 +17,19 @@ export const metadata: Metadata = {
   description: "Mastering the Art of Grooming",
     generator: 'v0.dev',
     icons: {
-      icon: "/favicon.ico", // alebo "/favicon.png"
+      icon: [
+        {
+          url: "/favicon_light.ico",
+          media: "(prefers-color-scheme: light)",
+        },
+        {
+          url: "/favicon_dark.ico",
+          media: "(prefers-color-scheme: dark)",
+        },
+        {
+          url: "/favicon_light.ico",
+        },
+      ],
     },
 }
 
