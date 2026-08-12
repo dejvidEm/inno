@@ -10,7 +10,6 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import {
   MapPin,
-  Phone,
   Mail,
   ArrowDown,
 } from "lucide-react"
@@ -528,15 +527,6 @@ const Footer = () => {
               <li className="flex items-center justify-center md:justify-start gap-3">
                 <MapPin className="h-5 w-5 text-beige-300 flex-shrink-0" />
                 <span className="text-gray-300">{t.contactAddress}</span>
-              </li>
-              <li className="flex items-center justify-center md:justify-start gap-3">
-                <Phone className="h-5 w-5 text-beige-300 flex-shrink-0" />
-                <a
-                  href={`tel:${t.contactPhone.replace(/\s/g, "")}`}
-                  className="text-gray-300 hover:text-beige-100 transition-colors duration-200"
-                >
-                  {t.contactPhone}
-                </a>
               </li>
               <li className="flex items-center justify-center md:justify-start gap-3">
                 <Mail className="h-5 w-5 text-beige-300 flex-shrink-0" />
