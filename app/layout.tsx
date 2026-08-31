@@ -4,6 +4,7 @@ import { Manrope } from "next/font/google" // Changed from Inter to Manrope
 import "./globals.css"
 import { LanguageProvider } from "@/context/language-context"
 import { SiteAnnouncementModal } from "@/components/site-announcement-modal"
+import { Analytics } from "@vercel/analytics/next"
 
 const manrope = Manrope({
   // Changed from Inter to Manrope
@@ -73,6 +74,7 @@ export default function RootLayout({
           {children}
           <SiteAnnouncementModal />
         </LanguageProvider>
+        <Analytics />
       </body>
     </html>
   )
