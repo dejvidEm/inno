@@ -50,7 +50,7 @@ export const translations = {
     pricingCombo: "Combo Haircut + Beard",
     pricingBeard: "Beard Trim",
     pricingCategoryMaster: "MASTER barber",
-    pricingCategoryJunior: "JUNIOR barber",
+    pricingCategoryJunior: "Barber",
 
    // Academy page translations
    academyHeroTitle: "Educate. Inspire.",
@@ -161,7 +161,7 @@ export const translations = {
     pricingCombo: "Combo strih + brada",
     pricingBeard: "Úprava brady",
     pricingCategoryMaster: "MASTER barber",
-    pricingCategoryJunior: "JUNIOR barber",
+    pricingCategoryJunior: "Barber",
     // Academy page translations
     academyHeroTitle: "Educate. Inspire.",
     academyHeroSubtitle: "Ovládnite remeslo holičstva s personalizovaným vzdelávaním od odborníkov z praxe.",
