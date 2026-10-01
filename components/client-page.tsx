@@ -243,9 +243,9 @@ const PricingSection = () => {
       id: "master" as const,
       title: t.pricingCategoryMaster,
       rows: [
-        { service: t.pricingHaircut, price: "33€", duration: "30 min" },
-        { service: t.pricingCombo, price: "49€", duration: "50 min" },
-        { service: t.pricingBeard, price: "19€", duration: "30 min" },
+        { service: t.pricingHaircut, price: "35€", duration: "30 min" },
+        { service: t.pricingCombo, price: "51€", duration: "50 min" },
+        { service: t.pricingBeard, price: "23€", duration: "30 min" },
       ],
     },
     {
