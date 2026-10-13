@@ -34,8 +34,21 @@ export const translations = {
     review3Name: "J. K.",
     review4Text: "The best haircut I’ve ever had. I recommend it to anyone who wants to look fresh.",
     review4Name: "F. S.",
+    review6Text:
+      "Great barbershop, I always leave happy. The barber who cuts my hair every time (Ďamo) is skilled, pleasant, and funny.",
+    review6Name: "",
+    review7Text:
+      "I'm a woman with a short haircut and the result was amazing! My hair was finished down to the last detail, the approach was truly professional, and the atmosphere was great. I felt comfortable there. I'll gladly come back. Thank you.",
+    review7Name: "",
+    review8Text:
+      "I was very happy with the haircut from Ďamo. From the start he seemed professional, precise, and very pleasant. I appreciate his approach, communication, and attention to every detail. I'm completely happy with the cut and I'll definitely come back to Ďamo. I can only recommend it.",
+    review8Name: "Philippe Lambrecht",
     review5Text: "Stylish place, great people, and top-quality services. The haircut turned out perfect!",
     review5Name: "J. J.",
+    reviewsGoogleCount: "reviews on Google",
+    reviewsAllLink: "All reviews on Google",
+    reviewsWriteButton: "Write a review",
+    reviewsLoading: "Loading reviews…",
     ctaBannerTitle: "Ready for Your Best Look Yet?", // New
     ctaBannerSubtitle: "Appointments are just a click away. Experience the art of grooming at INNOSTUDIO.", // New
     ctaBannerButton: "Book Appointment", // New
@@ -144,9 +157,22 @@ export const translations = {
     review4Text:
       "Barbershop odporúčam každemu kto hľada top servis, profesionálny prístup a pohodovú priateľsku atmosféru. Veľka vďaka chalani, robite to najlepšie, vždy top výsledok",
     review4Name: "I. CH.",
+    review6Text:
+      "Skvelý barbershop, vždy odchádzam spokojný, barber, ktorý ma pokaždé striha (ďamo) je šikovný, príjemný a vtipný.",
+    review6Name: "",
+    review7Text:
+      "Som žena s krátkym strihom a výsledok bol mega! Vlasy upravené do detailu, prístup bol naozaj profesionálny, atmosféra super. Cítila som sa tam dobre. Rada prídem znova 🙂 ďakujem",
+    review7Name: "",
+    review8Text:
+      "So strihom od Ďama som bol veľmi spokojný. Od začiatku pôsobil profesionálne, bol precízny a zároveň veľmi príjemný. Oceňujem jeho prístup, komunikáciu a dôraz na každý detail. So strihom som maximálne spokojný a určite sa k Ďamovi rád vrátim. Môžem len odporučiť.",
+    review8Name: "Philippe Lambrecht",
     review5Text:
     "Innostudio je barbershop, ktorý detailne vystihuje pojem KVALITA. Krásny a moderný priestor, z ktorého určite vyjde spokojný každý zákazník, ktorý vyskúša ponúkané služby. Jednoznačne odporúčam :)",
     review5Name: "M. M.",
+    reviewsGoogleCount: "hodnotení na Google",
+    reviewsAllLink: "Všetky recenzie na Google",
+    reviewsWriteButton: "Napísať recenziu",
+    reviewsLoading: "Načítavam recenzie…",
     ctaBannerTitle: "Pripravený na svoj najlepší vzhľad?", // New
     ctaBannerSubtitle: "Termíny sú len na jedno kliknutie. Zažite umenie starostlivosti v INNOSTUDIO.", // New
     ctaBannerButton: "Rezervovať Termín", // New

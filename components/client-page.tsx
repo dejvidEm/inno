@@ -23,8 +23,8 @@ import {
   User,
 } from "lucide-react"
 import { useLanguage } from "@/context/language-context"
-import type translations from "@/data/translations"
 import { SharedHeader } from "@/components/shared-header"
+import type { PublicReview } from "@/lib/google-reviews"
 import { BOOKING_URL } from "@/lib/booking"
 
 export type Barber = {
@@ -63,19 +63,15 @@ const barbersData: Barber[] = [
   },
 ]
 
-type Review = {
+type DisplayReview = {
   id: string
-  textKey: keyof typeof translations.en
-  nameKey: keyof typeof translations.en
+  text: string
+  name: string
   rating: number
+  relativeTime?: string
+  authorUrl?: string | null
+  authorPhoto?: string | null
 }
-
-const reviewsData: Review[] = [
-  { id: "review1", textKey: "review1Text", nameKey: "review1Name", rating: 5 },
-  { id: "review2", textKey: "review2Text", nameKey: "review2Name", rating: 5 },
-  { id: "review3", textKey: "review3Text", nameKey: "review3Name", rating: 5 },
-  { id: "review4", textKey: "review4Text", nameKey: "review4Name", rating: 5 },
-]
 
 const AnimatedSection = ({
   children,
@@ -329,10 +325,32 @@ const PricingSection = () => {
   )
 }
 
+const GOOGLE_ALL_REVIEWS_URL =
+  "https://www.google.com/maps/place/INNOSTUDIO/@48.1666113,17.1732734,17z/data=!4m8!3m7!1s0x476c8fa100577c41:0x1ca598b88e6dd2d3!8m2!3d48.1666113!4d17.1732734!9m1!1b1"
+
+const GOOGLE_WRITE_REVIEW_URL =
+  "https://search.google.com/local/writereview?placeid=ChIJQXxXAKGPbEcR09JtjriYpRw"
+
+const GoogleLogo = () => (
+  <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0" aria-hidden="true">
+    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+  </svg>
+)
+
 const ReviewsSection = ({ theme }: { theme: Theme }) => {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
   const [currentIndex, setCurrentIndex] = useState(0)
   const [direction, setDirection] = useState(0)
+  const [googleReviews, setGoogleReviews] = useState<PublicReview[] | null>(null)
+  const [googleSummary, setGoogleSummary] = useState<{ rating: number | null; total: number | null; mapsUrl: string | null }>({
+    rating: null,
+    total: null,
+    mapsUrl: null,
+  })
+  const [status, setStatus] = useState<"loading" | "google" | "fallback">("loading")
 
   const headingColor = theme === "light" ? "text-zinc-900" : "text-white"
   const hrColor = theme === "light" ? "bg-beige-400" : "bg-white"
@@ -343,13 +361,65 @@ const ReviewsSection = ({ theme }: { theme: Theme }) => {
   const starColor = theme === "light" ? "text-beige-500" : "text-yellow-400"
   const navButtonColor = theme === "light" ? "text-zinc-700 hover:text-zinc-900" : "text-gray-400 hover:text-white"
   const navButtonBgHover = theme === "light" ? "hover:bg-beige-100" : "hover:bg-zinc-700"
+  const mutedColor = theme === "light" ? "text-zinc-500" : "text-gray-400"
+
+  const fallbackReviews: DisplayReview[] = [
+    { id: "review1", text: t.review1Text, name: t.review1Name, rating: 5 },
+    { id: "review2", text: t.review2Text, name: t.review2Name, rating: 5 },
+    { id: "review3", text: t.review3Text, name: t.review3Name, rating: 5 },
+    { id: "review4", text: t.review4Text, name: t.review4Name, rating: 5 },
+    { id: "review6", text: t.review6Text, name: t.review6Name, rating: 5 },
+    { id: "review7", text: t.review7Text, name: t.review7Name, rating: 5 },
+    { id: "review8", text: t.review8Text, name: t.review8Name, rating: 5 },
+  ]
+
+  const reviews: DisplayReview[] =
+    status === "google" && googleReviews
+      ? googleReviews.map((review) => ({
+          id: review.id,
+          text: review.text,
+          name: review.authorName,
+          rating: review.rating,
+          relativeTime: review.relativeTime,
+          authorUrl: review.authorUrl,
+          authorPhoto: review.authorPhoto,
+        }))
+      : fallbackReviews
+
+  useEffect(() => {
+    const controller = new AbortController()
+    setStatus("loading")
+
+    fetch(`/api/reviews?lang=${language}`, { signal: controller.signal })
+      .then((response) => response.json())
+      .then((data: { reviews?: PublicReview[]; rating?: number | null; total?: number | null; mapsUrl?: string | null }) => {
+        if (Array.isArray(data.reviews) && data.reviews.length > 0) {
+          setGoogleReviews(data.reviews)
+          setGoogleSummary({
+            rating: data.rating ?? null,
+            total: data.total ?? null,
+            mapsUrl: data.mapsUrl ?? null,
+          })
+          setCurrentIndex(0)
+          setStatus("google")
+          return
+        }
+        setStatus("fallback")
+      })
+      .catch((error: unknown) => {
+        if (error instanceof DOMException && error.name === "AbortError") return
+        setStatus("fallback")
+      })
+
+    return () => controller.abort()
+  }, [language])
 
   const paginate = (newDirection: number) => {
     setDirection(newDirection)
     setCurrentIndex((prevIndex) => {
       const nextIndex = prevIndex + newDirection
-      if (nextIndex < 0) return reviewsData.length - 1
-      if (nextIndex >= reviewsData.length) return 0
+      if (nextIndex < 0) return reviews.length - 1
+      if (nextIndex >= reviews.length) return 0
       return nextIndex
     })
   }
@@ -359,83 +429,145 @@ const ReviewsSection = ({ theme }: { theme: Theme }) => {
     center: { zIndex: 1, x: 0, opacity: 1 },
     exit: (direction: number) => ({ zIndex: 0, x: direction < 0 ? "100%" : "-100%", opacity: 0 }),
   }
-  const currentReview = reviewsData[currentIndex]
+  const currentReview = reviews[Math.min(currentIndex, reviews.length - 1)]
 
   return (
     <AnimatedSection id="reviews" className={theme === "light" ? "bg-white" : "bg-black"}>
       <div className="w-full text-center">
         <h2 className={`text-3xl md:text-4xl font-bold tracking-tight uppercase ${headingColor}`}>{t.reviewsTitle}</h2>
         <div className={`mt-4 h-1 w-24 mx-auto ${hrColor}`} />
-        <div className="mt-12 md:mt-16 relative w-full max-w-2xl mx-auto h-[320px] sm:h-[280px] md:h-[250px] overflow-hidden">
-          <AnimatePresence initial={false} custom={direction}>
-            <motion.div
-              key={currentIndex}
-              custom={direction}
-              variants={reviewVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{ x: { type: "spring", stiffness: 300, damping: 30 }, opacity: { duration: 0.2 } }}
-              className={`absolute inset-0 p-6 md:p-8 rounded-lg shadow-xl ${cardBgColor} flex flex-col items-start text-left`}
-            >
-              <Quote
-                className={`absolute top-4 right-4 h-10 w-10 md:h-28 md:w-28 ${quoteIconColor} opacity-10`}
-              />
-              <div className="flex mb-3">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`h-4 w-4 md:h-5 md:w-5 ${starColor} ${i < currentReview.rating ? "fill-current" : ""}`}
-                  />
-                ))}
-              </div>
-              <p
-                className={`text-sm md:text-base ${cardTextColor} mb-4 leading-relaxed italic line-clamp-5 sm:line-clamp-4 md:line-clamp-3`}
+        {status === "google" && googleSummary.rating != null && googleSummary.total != null && (
+          <p className={`mt-4 text-sm ${mutedColor}`}>
+            {googleSummary.rating.toFixed(1)} · {googleSummary.total} {t.reviewsGoogleCount}
+          </p>
+        )}
+        <div className="mt-12 md:mt-16 relative w-full max-w-2xl mx-auto h-[360px] sm:h-[340px] md:h-[320px] overflow-hidden">
+          {status === "loading" || !currentReview ? (
+            <div className={`absolute inset-0 p-6 md:p-8 rounded-lg shadow-xl ${cardBgColor} flex items-center justify-center`}>
+              <p className={`text-sm ${mutedColor}`}>{t.reviewsLoading}</p>
+            </div>
+          ) : (
+            <AnimatePresence initial={false} custom={direction}>
+              <motion.div
+                key={currentReview.id}
+                custom={direction}
+                variants={reviewVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ x: { type: "spring", stiffness: 300, damping: 30 }, opacity: { duration: 0.2 } }}
+                className={`absolute inset-0 p-6 md:p-8 rounded-lg shadow-xl ${cardBgColor} flex flex-col items-start text-left`}
               >
-                "{t[currentReview.textKey as keyof typeof t]}"
-              </p>
-              <p className={`font-semibold text-sm md:text-base ${cardNameColor} mt-auto`}>
-                - {t[currentReview.nameKey as keyof typeof t]}
-              </p>
-            </motion.div>
-          </AnimatePresence>
+                <Quote
+                  className={`absolute top-4 right-4 h-10 w-10 md:h-28 md:w-28 ${quoteIconColor} opacity-10`}
+                />
+                <div className="flex mb-3">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`h-4 w-4 md:h-5 md:w-5 ${starColor} ${i < currentReview.rating ? "fill-current" : ""}`}
+                    />
+                  ))}
+                </div>
+                {currentReview.text ? (
+                  <p
+                    className={`text-sm md:text-base ${cardTextColor} mb-4 leading-relaxed italic line-clamp-6`}
+                  >
+                    "{currentReview.text}"
+                  </p>
+                ) : null}
+                <div className={`mt-auto flex items-center gap-3 ${cardNameColor}`}>
+                  {currentReview.authorPhoto ? (
+                    <img
+                      src={currentReview.authorPhoto}
+                      alt=""
+                      className="h-8 w-8 rounded-full object-cover"
+                    />
+                  ) : null}
+                  <div>
+                    {currentReview.name ? (
+                      <p className="font-semibold text-sm md:text-base">
+                        {currentReview.authorUrl ? (
+                          <a
+                            href={currentReview.authorUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:underline"
+                          >
+                            {currentReview.name}
+                          </a>
+                        ) : (
+                          currentReview.name
+                        )}
+                      </p>
+                    ) : null}
+                    {currentReview.relativeTime ? (
+                      <p className={`text-xs ${mutedColor}`}>{currentReview.relativeTime}</p>
+                    ) : null}
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          )}
         </div>
-        <div className="mt-6 flex justify-center items-center gap-4">
-          <button
-            onClick={() => paginate(-1)}
-            className={`p-2 rounded-full transition-colors duration-200 ${navButtonColor} ${navButtonBgHover}`}
-            aria-label="Previous review"
-          >
-            <ChevronLeft size={28} />
-          </button>
-          <div className="flex gap-2">
-            {reviewsData.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => {
-                  setDirection(index > currentIndex ? 1 : -1)
-                  setCurrentIndex(index)
-                }}
-                className={`w-2.5 h-2.5 rounded-full transition-colors duration-200 ${
-                  currentIndex === index
-                    ? theme === "light"
-                      ? "bg-beige-500"
-                      : "bg-yellow-400"
-                    : theme === "light"
-                      ? "bg-beige-200"
-                      : "bg-zinc-600"
-                } hover:${theme === "light" ? "bg-beige-400" : "bg-zinc-500"}`}
-                aria-label={`Go to review ${index + 1}`}
-              />
-            ))}
+        {status !== "loading" && reviews.length > 1 && (
+          <div className="mt-6 flex justify-center items-center gap-4">
+            <button
+              onClick={() => paginate(-1)}
+              className={`p-2 rounded-full transition-colors duration-200 ${navButtonColor} ${navButtonBgHover}`}
+              aria-label="Previous review"
+            >
+              <ChevronLeft size={28} />
+            </button>
+            <div className="flex gap-2">
+              {reviews.map((review, index) => (
+                <button
+                  key={review.id}
+                  onClick={() => {
+                    setDirection(index > currentIndex ? 1 : -1)
+                    setCurrentIndex(index)
+                  }}
+                  className={`w-2.5 h-2.5 rounded-full transition-colors duration-200 ${
+                    currentIndex === index
+                      ? theme === "light"
+                        ? "bg-beige-500"
+                        : "bg-yellow-400"
+                      : theme === "light"
+                        ? "bg-beige-200"
+                        : "bg-zinc-600"
+                  } hover:${theme === "light" ? "bg-beige-400" : "bg-zinc-500"}`}
+                  aria-label={`Go to review ${index + 1}`}
+                />
+              ))}
+            </div>
+            <button
+              onClick={() => paginate(1)}
+              className={`p-2 rounded-full transition-colors duration-200 ${navButtonColor} ${navButtonBgHover}`}
+              aria-label="Next review"
+            >
+              <ChevronRight size={28} />
+            </button>
           </div>
-          <button
-            onClick={() => paginate(1)}
-            className={`p-2 rounded-full transition-colors duration-200 ${navButtonColor} ${navButtonBgHover}`}
-            aria-label="Next review"
+        )}
+        <div className="mt-8 flex flex-col items-center gap-8 md:flex-row md:justify-center md:gap-12">
+          <Button
+            asChild
+            size="lg"
+            className="bg-white text-black hover:bg-gray-200 font-bold uppercase tracking-wider"
           >
-            <ChevronRight size={28} />
-          </button>
+            <a href={GOOGLE_WRITE_REVIEW_URL} target="_blank" rel="noopener noreferrer">
+              {t.reviewsWriteButton}
+            </a>
+          </Button>
+          <a
+            href={googleSummary.mapsUrl ?? GOOGLE_ALL_REVIEWS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`inline-flex items-center justify-center gap-2 text-sm underline-offset-4 hover:underline ${mutedColor}`}
+          >
+            <GoogleLogo />
+            {t.reviewsAllLink}
+          </a>
         </div>
       </div>
     </AnimatedSection>
