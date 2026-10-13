@@ -102,6 +102,8 @@ const AnimatedSection = ({
                 src={sideImageSrc || "/placeholder.svg"}
                 alt={sideImageAlt}
                 fill
+                quality={90}
+                sizes="(max-width: 1024px) 90vw, 800px"
                 loading="lazy"
                 className="object-cover rounded-sm shadow-xl"
               />
@@ -245,6 +247,8 @@ const InstructorsSection = ({ theme }: { theme: Theme }) => {
                       src={instructor.imgSrc || "/placeholder.svg"}
                       alt={`Portrait of ${instructor.name}`}
                       fill
+                      quality={90}
+                      sizes="(max-width: 1024px) 90vw, 512px"
                       loading="lazy"
                       style={{ objectFit: "cover" }}
                       className="grayscale hover:grayscale-0 transition-all duration-500"
@@ -463,19 +467,25 @@ const PhotoSwiper = ({
         <div className="relative w-full overflow-hidden rounded shadow-lg bg-zinc-100 dark:bg-zinc-800
                         aspect-[3/4] md:aspect-auto md:flex-1 md:min-h-0">
           <AnimatePresence custom={direction} mode="popLayout">
-            <motion.img
+            <motion.div
               key={index}
-              src={images[index]}
-              alt={alt}
               custom={direction}
               variants={variants}
               initial="enter"
               animate="center"
               exit="exit"
               transition={{ duration: 0.35, ease: "easeInOut" }}
-              className="absolute inset-0 h-full w-full object-cover select-none"
-              draggable={false}
-            />
+              className="absolute inset-0"
+            >
+              <Image
+                src={images[index]}
+                alt={alt}
+                fill
+                quality={90}
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover select-none"
+              />
+            </motion.div>
           </AnimatePresence>
   
           {/* touch swipe – na desktope vypnuté, aby šípky zostali klikateľné */}

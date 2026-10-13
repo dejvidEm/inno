@@ -6,10 +6,8 @@ import { LanguageProvider } from "@/context/language-context"
 import { SiteAnnouncementModal } from "@/components/site-announcement-modal"
 
 const manrope = Manrope({
-  // Changed from Inter to Manrope
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"], // Added more weights for flexibility
-  display: "swap", // Ensures text remains visible during font loading
+  subsets: ["latin", "latin-ext"],
+  display: "swap",
 })
 
 export const metadata: Metadata = {

@@ -72,6 +72,8 @@ const AnimatedSection = ({
                 src={sideImageSrc || "/placeholder.svg"}
                 alt={sideImageAlt}
                 fill
+                quality={90}
+                sizes="(max-width: 1024px) 90vw, 800px"
                 loading="lazy"
                 className="object-cover rounded-sm shadow-xl"
               />
@@ -337,8 +339,9 @@ const ContactFormSection = ({ theme }: { theme: Theme }) => {
             src="/photos/academy1.jpeg"
             alt="Barbershop"
             fill
+            quality={90}
+            sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover"
-            priority
           />
           <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
             <div className="text-center px-6">

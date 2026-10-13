@@ -110,7 +110,8 @@ const AnimatedSection = ({
                 src={sideImageSrc || "/placeholder.svg"}
                 alt={sideImageAlt}
                 fill
-                sizes="(max-width: 640px) 280px, (max-width: 1024px) 300px, 400px"
+                quality={90}
+                sizes="(max-width: 1024px) 90vw, 800px"
                 className="object-cover rounded-sm shadow-xl"
               />
             </div>
@@ -615,7 +616,8 @@ const BarbersSection = ({ theme }: { theme: Theme }) => {
                         src={barber.imgSrc}
                         alt={`Portrait of ${barber.name}`}
                         fill
-                        sizes="(max-width: 640px) 320px, 256px"
+                        quality={90}
+                        sizes="(max-width: 768px) 90vw, 512px"
                         style={{
                           objectFit: "cover",
                           objectPosition: barber.imgZoom ? "center 18%" : "center center",
