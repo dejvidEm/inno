@@ -1,5 +1,5 @@
-const PLACE_QUERY = "INNOSTUDIO Ivanská cesta 16733/15 Bratislava"
-const REVIEWS_REVALIDATE_SECONDS = 60 * 60
+// Twice a day per language stays far under the 1,000 free monthly review calls.
+const REVIEWS_REVALIDATE_SECONDS = 60 * 60 * 12
 
 export type PublicReview = {
   id: string
@@ -18,29 +18,23 @@ export type GoogleReviewsPayload = {
   mapsUrl: string | null
 }
 
-type PlacesReview = {
-  author_name?: string
-  author_url?: string
-  profile_photo_url?: string
+type PlacesNewReview = {
   rating?: number
-  relative_time_description?: string
-  text?: string
-  time?: number
-}
-
-type PlaceDetailsResponse = {
-  status?: string
-  result?: {
-    rating?: number
-    user_ratings_total?: number
-    url?: string
-    reviews?: PlacesReview[]
+  publishTime?: string
+  relativePublishTimeDescription?: string
+  text?: { text?: string }
+  authorAttribution?: {
+    displayName?: string
+    uri?: string
+    photoUri?: string
   }
 }
 
-type FindPlaceResponse = {
-  status?: string
-  candidates?: { place_id?: string }[]
+type PlacesNewResponse = {
+  rating?: number
+  userRatingCount?: number
+  reviews?: PlacesNewReview[]
+  error?: { message?: string }
 }
 
 const emptyPayload = (): GoogleReviewsPayload => ({
@@ -50,62 +44,50 @@ const emptyPayload = (): GoogleReviewsPayload => ({
   mapsUrl: null,
 })
 
-async function resolvePlaceId(apiKey: string): Promise<string | null> {
-  const configured = process.env.GOOGLE_PLACE_ID?.trim()
-  if (configured) return configured
-
-  const url = new URL("https://maps.googleapis.com/maps/api/place/findplacefromtext/json")
-  url.searchParams.set("input", PLACE_QUERY)
-  url.searchParams.set("inputtype", "textquery")
-  url.searchParams.set("fields", "place_id")
-  url.searchParams.set("language", "sk")
-  url.searchParams.set("key", apiKey)
-
-  const response = await fetch(url, { next: { revalidate: 60 * 60 * 24 } })
-  if (!response.ok) return null
-
-  const data = (await response.json()) as FindPlaceResponse
-  if (data.status !== "OK") return null
-  return data.candidates?.[0]?.place_id ?? null
-}
-
 export async function getGoogleReviews(language: "sk" | "en"): Promise<GoogleReviewsPayload> {
   const apiKey = process.env.GOOGLE_PLACES_API_KEY?.trim()
-  if (!apiKey) return emptyPayload()
+  const placeId = process.env.GOOGLE_PLACE_ID?.trim()
+  if (!apiKey || !placeId) return emptyPayload()
 
-  const placeId = await resolvePlaceId(apiKey)
-  if (!placeId) return emptyPayload()
+  const url = new URL(`https://places.googleapis.com/v1/places/${encodeURIComponent(placeId)}`)
+  url.searchParams.set("languageCode", language)
 
-  const url = new URL("https://maps.googleapis.com/maps/api/place/details/json")
-  url.searchParams.set("place_id", placeId)
-  url.searchParams.set("fields", "rating,user_ratings_total,reviews,url")
-  url.searchParams.set("reviews_sort", "newest")
-  url.searchParams.set("language", language)
-  url.searchParams.set("key", apiKey)
-
-  const response = await fetch(url, { next: { revalidate: REVIEWS_REVALIDATE_SECONDS } })
+  const response = await fetch(url, {
+    headers: {
+      "X-Goog-Api-Key": apiKey,
+      "X-Goog-FieldMask": "rating,userRatingCount,reviews",
+    },
+    next: { revalidate: REVIEWS_REVALIDATE_SECONDS },
+  })
   if (!response.ok) return emptyPayload()
 
-  const data = (await response.json()) as PlaceDetailsResponse
-  if (data.status !== "OK" || !data.result) return emptyPayload()
+  const data = (await response.json()) as PlacesNewResponse
+  if (data.error) return emptyPayload()
 
-  const reviews = [...(data.result.reviews ?? [])]
-    .sort((a, b) => (b.time ?? 0) - (a.time ?? 0))
-    .filter((review) => review.author_name)
-    .map((review) => ({
-      id: `${review.time ?? "review"}-${review.author_name}`,
-      authorName: review.author_name as string,
-      authorUrl: review.author_url ?? null,
-      authorPhoto: review.profile_photo_url ?? null,
-      rating: Math.round(review.rating ?? 0),
-      text: review.text?.trim() ?? "",
-      relativeTime: review.relative_time_description ?? "",
-    }))
+  const reviews = [...(data.reviews ?? [])]
+    .sort((a, b) => {
+      const aTime = a.publishTime ? Date.parse(a.publishTime) : 0
+      const bTime = b.publishTime ? Date.parse(b.publishTime) : 0
+      return bTime - aTime
+    })
+    .filter((review) => review.authorAttribution?.displayName && review.text?.text?.trim())
+    .map((review) => {
+      const author = review.authorAttribution as NonNullable<PlacesNewReview["authorAttribution"]>
+      return {
+        id: `${review.publishTime ?? "review"}-${author.displayName}`,
+        authorName: author.displayName as string,
+        authorUrl: author.uri ?? null,
+        authorPhoto: author.photoUri ?? null,
+        rating: Math.round(review.rating ?? 0),
+        text: review.text?.text?.trim() ?? "",
+        relativeTime: review.relativePublishTimeDescription ?? "",
+      }
+    })
 
   return {
     reviews,
-    rating: typeof data.result.rating === "number" ? data.result.rating : null,
-    total: typeof data.result.user_ratings_total === "number" ? data.result.user_ratings_total : null,
+    rating: typeof data.rating === "number" ? data.rating : null,
+    total: typeof data.userRatingCount === "number" ? data.userRatingCount : null,
     mapsUrl: `https://search.google.com/local/reviews?placeid=${encodeURIComponent(placeId)}`,
   }
 }
