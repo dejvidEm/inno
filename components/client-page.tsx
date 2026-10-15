@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect, useRef, Suspense, Fragment } from "react"
+import { useState, useEffect, useRef, Suspense } from "react"
 import Link from "next/link"
 import Image from "next/image"
 
@@ -258,68 +258,36 @@ const PricingSection = () => {
 
   return (
     <AnimatedSection id="pricing" className="bg-white text-zinc-900">
-      <div className="w-full max-w-2xl mx-auto text-center md:text-left">
-        <h2 className="text-3xl md:text-4xl font-bold tracking-tight uppercase text-zinc-900">
-          {t.pricingTitle}
-        </h2>
-        <div className="mt-1 mb-8 h-1 w-24 mx-auto md:mx-0 bg-beige-400" />
-        <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm">
-          <table className="min-w-full text-left text-sm text-zinc-900">
-            <thead>
-              <tr className="text-zinc-900">
-                <th className="px-6 py-4 font-semibold text-zinc-800 uppercase tracking-wider">
-                  {t.pricingService}
-                </th>
-                <th className="px-6 py-4 font-semibold text-zinc-800 uppercase tracking-wider text-right">
-                  {t.pricingPrice}
-                </th>
-                <th className="px-6 py-4 font-semibold text-zinc-800 uppercase tracking-wider text-right hidden md:table-cell">
-                  {t.pricingDuration}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {pricingSections.map((section) => (
-                <Fragment key={section.id}>
-                  {/* Mobile: 2 visible columns — colspan 2 so the category label is visible */}
-                  <tr className="border-t border-gray-200 bg-gray-100 md:hidden">
-                    <td
-                      colSpan={2}
-                      className="px-6 py-3 font-bold text-zinc-950 tracking-wide text-sm"
-                    >
-                      {section.title}
-                    </td>
-                  </tr>
-                  {/* Desktop: full width category row */}
-                  <tr className="hidden border-t border-gray-200 bg-gray-100 md:table-row">
-                    <td
-                      colSpan={3}
-                      className="px-6 py-2 font-bold text-zinc-950 tracking-wide text-sm"
-                    >
-                      {section.title}
-                    </td>
-                  </tr>
-                  {section.rows.map((item) => (
-                    <tr
-                      key={`${section.id}-${item.service}`}
-                      className="border-t border-gray-100 hover:bg-gray-50 transition-colors"
-                    >
-                      <td className="px-6 py-4 whitespace-nowrap text-zinc-900 font-medium">{item.service}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-zinc-700 text-right">
-                        <span className="md:hidden">
-                          {item.price} <span className="text-gray-400">·</span> <span>{item.duration}</span>
-                        </span>
-                        <span className="hidden md:inline">{item.price}</span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-zinc-700 text-right hidden md:table-cell">
-                        {item.duration}
-                      </td>
-                    </tr>
-                  ))}
-                </Fragment>
-              ))}
-            </tbody>
-          </table>
+      <div className="w-full max-w-5xl mx-auto">
+        <div className="text-center">
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight uppercase text-zinc-900">
+            {t.pricingTitle}
+          </h2>
+          <div className="mt-4 h-1 w-24 mx-auto bg-beige-400" />
+        </div>
+
+        <div className="mt-14 divide-y divide-zinc-200 md:mt-20">
+          {pricingSections.map((section) => (
+            <div key={section.id} className="py-12 first:pt-0 last:pb-0 md:py-16">
+              <p className="mb-8 text-center text-xs font-medium uppercase tracking-[0.22em] text-zinc-400 md:mb-10">
+                {section.title}
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 md:divide-x md:divide-zinc-200">
+                {section.rows.map((item, index) => (
+                  <div
+                    key={`${section.id}-${item.service}`}
+                    className={`px-1 py-8 md:px-10 md:py-2 ${
+                      index > 0 ? "border-t border-zinc-200 md:border-t-0" : ""
+                    }`}
+                  >
+                    <h3 className="text-base font-medium text-zinc-900 md:text-lg">{item.service}</h3>
+                    <p className="mt-1.5 text-sm text-zinc-500">{item.duration}</p>
+                    <p className="mt-6 text-lg font-medium tracking-wide text-zinc-900">{item.price}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </AnimatedSection>
