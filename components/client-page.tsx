@@ -42,6 +42,12 @@ type Theme = "light" | "dark"
 // Updated barbersData with Instagram links
 const barbersData: Barber[] = [
   {
+    name: 'Samuel "Ďamo" Brinza',
+    instagram: "https://www.instagram.com/br_.samo/",
+    imgSrc: "/photos/damo.jpeg",
+    bio: "Ahojte, moje meno je Samuel Brinza, no väčšina ľudí ma pozná pod prezývkou „Ďamo“. Barberingu sa venujem s vášňou, dôrazom na detail a chuťou neustále sa zlepšovať. Táto práca ma baví najmä preto, že spája kreativitu, kontakt s ľuďmi a možnosť vytvoriť každému klientovi strih, ktorý mu naozaj sadne.\n\nAbsolvoval som rozsiahle školenie v INNO Studio, kde som získal nové skúsenosti, naučil sa moderné techniky a posunul svoj pohľad na profesionálny barbering. Každý strih beriem individuálne – či už ide o fade, klasický pánsky strih alebo úpravu brady, vždy si dávam záležať na čistom a precíznom výsledku.\n\nBarbering je pre mňa viac než len práca. Je to remeslo, štýl a cesta neustáleho zlepšovania. Mojím cieľom je, aby sa každý klient cítil dobre počas celej návštevy a odchádzal spokojný so strihom, ktorý vystihuje jeho osobnosť.",
+  },
+  {
     name: "Lukáš \"Lucas\" Kocian",
     instagram: "https://www.instagram.com/lukaskocian_/",
     imgSrc: "/photos/lukas.jpeg",
@@ -54,12 +60,6 @@ const barbersData: Barber[] = [
     imgSrc: "/photos/rynik.jpeg",
     imgZoom: 1.15,
     bio: 'Volám sa Dominik "Rynik" Rybar, som barber, ktorý miluje moderné účesy a precíznu prácu s nožnicami aj strojčekom. Barberingu sa venujem od strednej školy. Svoje zručnosti som zdokonaľoval na prestížnych školeniach pod vedením odborníkov ako Alan Beak, Hayden Cassidy a Menspire. Vďaka týmto skúsenostiam prinášam klientom štýlové a precízne strihy, ale aj individuálny prístup a servis na najvyššej úrovni. V INNOSTUDIO spájam minimalizmus s kvalitou, aby každý od nás odchádzal sebavedomý a spokojný.',
-  },
-  {
-    name: 'Samuel "Ďamo" Brinza',
-    instagram: "",
-    imgSrc: "/photos/damo.jpeg",
-    bio: "Ahojte, moje meno je Samuel Brinza, no väčšina ľudí ma pozná pod prezývkou „Ďamo“. Barberingu sa venujem s vášňou, dôrazom na detail a chuťou neustále sa zlepšovať. Táto práca ma baví najmä preto, že spája kreativitu, kontakt s ľuďmi a možnosť vytvoriť každému klientovi strih, ktorý mu naozaj sadne.\n\nAbsolvoval som rozsiahle školenie v INNO Studio, kde som získal nové skúsenosti, naučil sa moderné techniky a posunul svoj pohľad na profesionálny barbering. Každý strih beriem individuálne – či už ide o fade, klasický pánsky strih alebo úpravu brady, vždy si dávam záležať na čistom a precíznom výsledku.\n\nBarbering je pre mňa viac než len práca. Je to remeslo, štýl a cesta neustáleho zlepšovania. Mojím cieľom je, aby sa každý klient cítil dobre počas celej návštevy a odchádzal spokojný so strihom, ktorý vystihuje jeho osobnosť.",
   },
 ]
 
@@ -556,11 +556,13 @@ const BarbersSection = ({ theme }: { theme: Theme }) => {
       <div id="barbers" className="container mx-auto text-center">
         <h2 className={`text-3xl md:text-4xl font-bold tracking-tight uppercase ${headingColor}`}>{t.barbersTitle}</h2>
         <div className={`mt-4 h-1 w-24 mx-auto ${hrColor}`} />
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 lg:gap-x-10 gap-y-12 max-w-7xl mx-auto">
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 md:justify-items-center gap-y-12 md:gap-y-8 md:max-w-4xl mx-auto">
           {barbersData.map((barber, index) => (
             <motion.div
               key={barber.name}
-              className="relative overflow-hidden flex flex-col items-center w-full h-[40rem] md:h-[43rem] lg:h-[44rem] pt-12 group"
+              className={`relative overflow-hidden flex flex-col items-center w-full h-[40rem] md:h-auto pt-12 group md:max-w-xs ${
+                index === 0 ? "md:col-span-2" : "md:pt-6"
+              }`}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.5 }}
