@@ -180,6 +180,12 @@ const HeroSection = () => {
         >
           {t.heroSubtitle}
         </p>
+        <div className="mt-5 md:mt-7 flex flex-col items-center gap-4 md:gap-5">
+          <span className="h-px w-8 md:w-10 bg-beige-400" aria-hidden="true" />
+          <p className="text-[11px] md:text-sm font-medium uppercase tracking-[0.22em] md:tracking-[0.32em] text-gray-200">
+            {t.heroLocation}
+          </p>
+        </div>
       </div>
     </section>
   )
@@ -800,10 +806,10 @@ const CallToActionBanner = ({ outerRef }: { outerRef?: React.Ref<HTMLDivElement>
 const Footer = () => {
   const { t } = useLanguage()
   const footerNavItems = [
-    { href: "#about", label: t.navAbout },
-    { href: "#barbers", label: t.navBarbers },
-    { href: "#reviews", label: t.navReviews },
-    { href: "#contact", label: t.navContact },
+    { href: "/#about", label: t.navAbout },
+    { href: "/#barbers", label: t.navBarbers },
+    { href: "/#reviews", label: t.navReviews },
+    { href: "/#contact", label: t.navContact },
     { href: "/academy", label: "Academy" },
     { href: "/kariera", label: t.navCareer },
   ]
@@ -813,8 +819,8 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-16 text-center md:text-left">
           <div className="flex flex-col items-center md:items-start">
-            <Link href="#hero" className="flex items-center gap-2 text-white mb-4">
-              <img src="pics/new.png" alt="" className="w-40"/>
+            <Link href="/" className="flex items-center gap-2 text-white mb-4">
+              <img src="/pics/new.png" alt="INNOSTUDIO" className="w-40"/>
             </Link>
             <p className="text-sm text-gray-400">
               &copy; {new Date().getFullYear()} INNOSTUDIO. <br className="sm:hidden" />
@@ -865,8 +871,8 @@ const Footer = () => {
             <span className="font-semibold text-white">RYCAS Academy s. r. o.</span> &nbsp;|&nbsp; Doležalova 3424/15C, Bratislava - Ružinov &nbsp;|&nbsp; IČO: 57019151 &nbsp;|&nbsp; DIČ: 2122542092
           </div>
           <div className="flex gap-4 mt-2 md:mt-0">
-            <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" className="hover:text-beige-100 underline transition-colors duration-200">Privacy Policy</a>
-            <a href="/cookies" target="_blank" rel="noopener noreferrer" className="hover:text-beige-100 underline transition-colors duration-200">Cookies Policy</a>
+            <Link href="/privacy-policy" className="hover:text-beige-100 underline transition-colors duration-200">Privacy Policy</Link>
+            <Link href="/cookies" className="hover:text-beige-100 underline transition-colors duration-200">Cookies Policy</Link>
           </div>
         </div>
       </div>
@@ -924,8 +930,8 @@ export function ClientPage() {
     </Suspense>
         </div>
         <CallToActionBanner outerRef={ctaBannerRef} />
+        <GoogleMap />
       </main>
-      <GoogleMap />
       <Footer />
       <BookNowButton isCtaVisible={isCtaBannerInView} />
     </div>

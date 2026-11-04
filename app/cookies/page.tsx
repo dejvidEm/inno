@@ -1,9 +1,23 @@
 import { Footer } from "@/components/client-page"
+import { JsonLd } from "@/components/json-ld"
 import { SharedHeader } from "@/components/shared-header"
+import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo"
+
+export const metadata = pageMetadata({
+  title: "Cookies",
+  description: "Informácie o súboroch cookies na webe INNOSTUDIO, barbershop v Bratislave - Ružinov.",
+  path: "/cookies",
+})
 
 export default function CookiesPolicyPage() {
   return (
     <div className="bg-white min-h-screen font-sans flex flex-col">
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "INNOSTUDIO", path: "/" },
+          { name: "Cookies", path: "/cookies" },
+        ])}
+      />
       <SharedHeader />
       <main className="flex-1 flex items-center justify-center px-8 py-24">
         <div className="w-full max-w-3xl text-left space-y-8">

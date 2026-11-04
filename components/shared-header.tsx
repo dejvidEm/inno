@@ -51,10 +51,10 @@ export const SharedHeader = () => {
 
   const navItems = isLegalPage
     ? [
-        { href: '/', label: t.navAbout },
-        { href: '/', label: t.navBarbers },
-        { href: '/', label: t.navReviews },
-        { href: '/', label: t.navContact },
+        { href: '/#about', label: t.navAbout },
+        { href: '/#barbers', label: t.navBarbers },
+        { href: '/#reviews', label: t.navReviews },
+        { href: '/#contact', label: t.navContact },
         { href: '/academy', label: 'Academy' },
         { href: '/kariera', label: t.navCareer },
       ]
@@ -94,7 +94,7 @@ export const SharedHeader = () => {
           {/* Logo left */}
           <div className="flex-1 flex items-center min-w-0">
             <Link href={logoHref} className="flex items-center gap-2 text-white z-[61]" onClick={closeMenu}>
-              <img src="/pics/new.png" alt="" className="w-32 -mt-2"/>
+              <img src="/pics/new.png" alt="INNOSTUDIO" className="w-32 -mt-2"/>
             </Link>
           </div>
           {/* Center nav links (desktop only) */}

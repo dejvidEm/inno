@@ -8,12 +8,13 @@ export const translations = {
     navCareer: "Career",
     heroTitle: "Modern. Clean. Elegant.",
     heroSubtitle: "Welcome to INNOSTUDIO, a studio where style speaks for you.",
+    heroLocation: "Bratislava - Ružinov",
     aboutTitle: "Our Story",
     aboutText:
       "At INNOSTUDIO, we bring the elegance and precision of a modern barbershop, where every detail tells a story. Our philosophy is simple — to offer exceptional service in a minimalist environment that will make you feel special and confident. Every cut is a masterpiece, created with an emphasis on purity and the perfect balance between style and functionality. With us, it's not just about styling your hair or beard, but a comprehensive experience that will strengthen your image and inner confidence. Enter a world where modern design and first-class service create a unique atmosphere for men who expect only the best.",
     barbersTitle: "Meet The Barbers",
     contactTitle: "Get In Touch",
-    contactAddress: "Ivanská cesta 16733/15, Bratislava",
+    contactAddress: "Ivanská cesta 16733/15, 821 04 Bratislava - Ružinov",
     contactPhone: "0904 163 648", // Added
     contactEmail: "innomenstudio@gmail.com", // Added
     banner1Title: "Ready for a Transformation?",
@@ -127,12 +128,13 @@ export const translations = {
     navCareer: "Kariéra",
     heroTitle: "Moderné. Čisté. Elegantné.",
     heroSubtitle: "Vítaj v INNOSTUDIO, kde štýl hovorí za teba",
+    heroLocation: "Bratislava - Ružinov",
     aboutTitle: "Náš príbeh",
     aboutText:
       "V INNOSTUDIO prinášame eleganciu a precíznosť moderného barbershopu, kde každý detail rozpráva príbeh. Naša filozofia je jednoduchá — ponúknuť výnimočný servis v minimalistickom prostredí, ktoré vás nechá zažiť pocit výnimočnosti a sebadôvery. Každý strih je majstrovským dielom, vytvoreným s dôrazom na čistotu  a perfektnú rovnováhu medzi štýlom a funkčnosťou. U nás nejde len o úpravu vlasov či brady, ale o komplexný zážitok, ktorý posilní váš imidž aj vnútornú istotu. Vstúpte do sveta, kde moderný dizajn a prvotriedny servis vytvárajú jedinečnú atmosféru pre mužov, ktorí očakávajú len to najlepšie.",
     barbersTitle: "Zoznámte sa s barbermi",
     contactTitle: "Kontaktujte nás",
-    contactAddress: "Ivanská cesta 16733/15, Bratislava",
+    contactAddress: "Ivanská cesta 16733/15, 821 04 Bratislava - Ružinov",
     contactPhone: "0904 163 648", // Added
     contactEmail: "innomenstudio@gmail.com", // Added
     banner1Title: "Pripravený na premenu?",

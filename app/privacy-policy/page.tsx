@@ -1,9 +1,24 @@
 import { Footer } from "@/components/client-page"
+import { JsonLd } from "@/components/json-ld"
 import { SharedHeader } from "@/components/shared-header"
+import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo"
+
+export const metadata = pageMetadata({
+  title: "Ochrana osobných údajov",
+  description:
+    "Zásady ochrany osobných údajov prevádzkovateľa INNOSTUDIO, RYCAS ACADEMY s. r. o., Bratislava - Ružinov.",
+  path: "/privacy-policy",
+})
 
 export default function PrivacyPolicyPage() {
   return (
     <div className="bg-white min-h-screen font-sans flex flex-col">
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "INNOSTUDIO", path: "/" },
+          { name: "Ochrana osobných údajov", path: "/privacy-policy" },
+        ])}
+      />
       <SharedHeader />
       <main className="flex-1 flex items-center justify-center px-8 py-24">
         <div className="w-full max-w-3xl text-left space-y-8">
