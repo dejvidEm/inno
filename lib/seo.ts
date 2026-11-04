@@ -6,9 +6,8 @@ export const SITE_NAME = "INNOSTUDIO"
 export const SITE_LOCATION = "Bratislava - Ružinov"
 export const TITLE_SUFFIX = `${SITE_NAME} ${SITE_LOCATION}`
 
-export const HOME_TITLE = `${SITE_NAME} | Barbershop ${SITE_LOCATION}`
-export const HOME_DESCRIPTION =
-  "Barbershop INNOSTUDIO v Bratislave - Ružinov na Ivanskej ceste 15. Pánsky strih, úprava brady a combo. Po–Pi 8:00–20:00. Rezervácia online."
+export const HOME_TITLE = `${SITE_NAME} | Bratislava-Ružinov`
+export const HOME_DESCRIPTION = "Moderné, čisté, elegantné barber štúdio v Bratislave-Ružinove"
 
 const MAPS_URL =
   "https://www.google.com/maps/search/?api=1&query=INNOSTUDIO&query_place_id=ChIJQXxXAKGPbEcR09JtjriYpRw"
