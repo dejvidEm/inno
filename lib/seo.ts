@@ -7,7 +7,8 @@ export const SITE_LOCATION = "Bratislava - Ružinov"
 export const TITLE_SUFFIX = `${SITE_NAME} ${SITE_LOCATION}`
 
 export const HOME_TITLE = `${SITE_NAME} | Bratislava-Ružinov`
-export const HOME_DESCRIPTION = "Moderné, čisté, elegantné barber štúdio v Bratislave-Ružinove"
+export const HOME_DESCRIPTION =
+  "Vstúpte do sveta, kde moderný dizajn a prvotriedny servis vytvárajú jedinečnú atmosféru pre mužov, ktorí očakávajú len to najlepšie."
 
 const MAPS_URL =
   "https://www.google.com/maps/search/?api=1&query=INNOSTUDIO&query_place_id=ChIJQXxXAKGPbEcR09JtjriYpRw"
