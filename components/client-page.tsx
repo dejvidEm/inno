@@ -170,14 +170,22 @@ const HeroSection = () => {
         <ArrowDown className="h-10 w-10 text-white"/>
       </div>
       <div className="relative z-20 flex h-full flex-col items-center justify-center text-center text-white px-4">
-        <h1 className="max-w-5xl text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
-          INNOSTUDIO <span className="font-light text-white/80">|</span> Bratislava-Ružinov
+        <h1
+          className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tighter uppercase"
+        >
+          {t.heroTitle}
         </h1>
         <p
           className="mt-4 max-w-2xl text-md md:text-xl text-gray-300"
         >
           {t.heroSubtitle}
         </p>
+        <div className="mt-5 md:mt-7 flex flex-col items-center gap-4 md:gap-5">
+          <span className="h-px w-8 md:w-10 bg-beige-400" aria-hidden="true" />
+          <p className="text-[11px] md:text-sm font-medium uppercase tracking-[0.22em] md:tracking-[0.32em] text-gray-200">
+            {t.heroLocation}
+          </p>
+        </div>
       </div>
     </section>
   )

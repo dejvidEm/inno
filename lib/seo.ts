@@ -6,7 +6,7 @@ export const SITE_NAME = "INNOSTUDIO"
 export const SITE_LOCATION = "Bratislava - Ružinov"
 export const TITLE_SUFFIX = `${SITE_NAME} ${SITE_LOCATION}`
 
-export const HOME_TITLE = `${SITE_NAME} | Bratislava-Ružinov`
+export const HOME_TITLE = `${SITE_NAME} | ${SITE_LOCATION}`
 export const HOME_DESCRIPTION =
   "Vstúpte do sveta, kde moderný dizajn a prvotriedny servis vytvárajú jedinečnú atmosféru pre mužov, ktorí očakávajú len to najlepšie."
 
